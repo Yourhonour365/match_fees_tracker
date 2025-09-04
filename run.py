@@ -1,4 +1,11 @@
-# Your code goes here.
-# You can delete these comments, but do not change the name of this file
-# Write your code to expect a terminal of 80 characters wide and 24 rows high
-print("hello world")
+
+def main():
+    """
+    Display the main menu for match fees tracker
+    """
+    print("=== Match Fees Tracker ===")
+    print("1) Add player")
+    print("2) List players")
+    print("0) Exit")
+
+main()
