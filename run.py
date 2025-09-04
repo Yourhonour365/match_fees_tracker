@@ -21,13 +21,15 @@ def list_players():
 def add_match():
     """
     Ask for a match description and store it in the matches list.
-    Add a match fee that needs to be paid by each player. 
+    Add a match fee that needs to be paid by each player.
+    Add a date for each match 
     """
     match = input("Enter match description: ")
+    date = input("Enter match date (e.g. 2025-09-04): ")
     fee = float(input("Enter fee amount: "))
     matches.append(match)
-    fees[match] = fee
-    print(f"Added match: {match} (Fee: £{fee:.2f})")
+    fees[match] = {"date": date, "fee": fee}
+    print(f"Added match: {match} on {date} (Fee: £{fee:.2f})")
 
 def list_matches():
     """
