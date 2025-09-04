@@ -1,3 +1,9 @@
+def add_player():
+    """
+    Ask for a player's name and print a confirmation.
+    """
+    name = input("Enter player name: ")
+    print(f"Added player: {name}")
 
 def main():
     """
@@ -9,3 +15,5 @@ def main():
     print("0) Exit")
 
 main()
+add_player()
+
