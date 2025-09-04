@@ -25,6 +25,14 @@ def add_match():
     matches.append(match)
     print(f"Added match: {match}")
 
+def list_matches():
+    """
+    Print all matches currently stored in the matches list.
+    """
+    print("=== Matches ===")
+    for match in matches:
+        print(match)
+
 
 def main():
     """
@@ -39,4 +47,5 @@ def main():
 add_player()
 list_players()
 add_match()
+list_matches()
 
