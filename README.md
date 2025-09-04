@@ -1,32 +1,10 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Match Fees Tracker
 
-Welcome,
+A tool to help amateur sports clubs easily collect and manage match fees. Collecting fees after a game is often an admin headache — some players have already left, some head to the pub, and others go straight home to their families. Match Fees Tracker makes it simple to track payments without the chaos.
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **May 26, 2025**
+Once the core Python logic is proven in the terminal, the next step is to generate secure payment links that can be easily posted into WhatsApp team groups. These links will also track which players have paid and highlight those who still owe.
 
-## Reminders
+In future, the system could even send automatic reminders to players who haven’t paid, saving team admins even more time and hassle.
 
-- Your code must be placed in the `run.py` file
-- Your dependencies must be placed in the `requirements.txt` file
-- Do not edit any of the other files or your code may not deploy properly
+The app is especially relevant for grassroots sports such as cricket, hockey, football, and rugby — where players typically pay small match fees per game (or even for some practices) to cover costs like teas, referees, new match balls (in cricket), and lighting costs (for hockey on astroturf at night).
 
-## Creating the Heroku app
-
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
-
-1. `heroku/python`
-2. `heroku/nodejs`
-
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
-
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
-
-Connect your GitHub repository and deploy as normal.
-
-## Constraints
-
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
-
----
-
-Happy coding!
