@@ -34,10 +34,14 @@ def add_match():
 def list_matches():
     """
     Print all matches currently stored in the matches list.
+    Also print the fee and date associated with each match.
     """
     print("=== Matches ===")
     for match in matches:
-        print(match)
+        details = fees[match]
+        date = details["date"]
+        fee = details["fee"]
+        print(f"{match} on {date} Match fee = £{fee:.2f}")
 
 
 def main():
