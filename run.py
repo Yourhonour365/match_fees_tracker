@@ -1,8 +1,11 @@
+players = []
+
 def add_player():
     """
     Ask for a player's name and print a confirmation.
     """
     name = input("Enter player name: ")
+    players.append(name)
     print(f"Added player: {name}")
 
 def main():
@@ -14,6 +17,6 @@ def main():
     print("2) List players")
     print("0) Exit")
 
-main()
+#main()
 add_player()
 
