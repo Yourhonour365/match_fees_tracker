@@ -8,6 +8,15 @@ def add_player():
     players.append(name)
     print(f"Added player: {name}")
 
+def list_players():
+    """
+    Print all players currently stored in the players list.
+    """
+    print("=== Current Players ===")
+    for player in players:
+        print(player)
+
+
 def main():
     """
     Display the main menu for match fees tracker
@@ -19,4 +28,5 @@ def main():
 
 #main()
 add_player()
+list_players()
 
