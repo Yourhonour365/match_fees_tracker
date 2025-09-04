@@ -1,4 +1,5 @@
 players = []
+matches = []
 
 def add_player():
     """
@@ -16,6 +17,14 @@ def list_players():
     for player in players:
         print(player)
 
+def add_match():
+    """
+    Ask for a match description and store it in the matches list.
+    """
+    match = input("Enter match description: ")
+    matches.append(match)
+    print(f"Added match: {match}")
+
 
 def main():
     """
@@ -29,4 +38,5 @@ def main():
 #main()
 add_player()
 list_players()
+add_match()
 
