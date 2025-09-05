@@ -1,6 +1,7 @@
 players = []
 matches = []
 
+club_name = input("Enter the name of your club: ")
 
 def add_player():
     """
