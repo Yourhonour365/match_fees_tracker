@@ -1,7 +1,7 @@
 players = []
 matches = []
 
-club_name = input("Enter the name of your club: ")
+club_name = input("Enter the name of your club: ").strip().title()
 
 
 def add_player():
@@ -9,7 +9,7 @@ def add_player():
     Ask for a player's name and print a confirmation.
     """
     while True:
-        name = input("Enter player name: ").strip()
+        name = input("Enter player name: ").strip().title()
         if not name:
             print("Player name cannot be empty. Please try again.")
             continue
@@ -37,16 +37,17 @@ def add_match():
     Add a date for each match
     """
     while True:
-        opponent = input("Enter match opponent: ").strip()
+        opponent = input("Enter match opponent: ").strip().title()
         if not opponent:
             print("Opponent cannot be empty. Please try again.")
             continue
+        print(f"Opponent: {opponent}")
         break
 
     from datetime import datetime
 
     while True:
-        date_str = input("Enter match date (DD/MM/YY or DD/MM/YYYY): ").strip()
+        date_str = input("Enter match date (DD/MM/YY): ").strip()
         if not date_str:
             print("Date cannot be empty. Please try again.")
             continue
@@ -61,11 +62,11 @@ def add_match():
                 break
             except ValueError:
                 print(
-                    "Invalid date. Please use DD/MM/YY (05/09/25) or DD/MM/YYYY (05/09/2025).")
+                    "Invalid date. Please use DD/MM/YY (05/09/25)")
                 continue
 
     while True:
-        fee = input("Enter fee amount: ").strip()
+        fee = input("Enter match fee: ").strip()
         if not fee:
             print("Fee cannot be empty. Please try again.")
             continue
