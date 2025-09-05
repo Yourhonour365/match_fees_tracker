@@ -49,11 +49,8 @@ def list_matches():
     Also print the fee and date associated with each match.
     """
     print("=== Matches ===")
-        #for match in matches:
-        #details = fees[match]
-        #date = details["date"]
-        #fee = details["fee"]
-        #print(f"{match} on {date} Match fee = £{fee:.2f}")
+    for match in matches:
+        print(f"Vs {match['opponent']} {match['date']} Match Fee £{match['fee']:.2f}")
 
 
 def main():
