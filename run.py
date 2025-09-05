@@ -1,4 +1,6 @@
-from datetime import datetime
+from datetime import datetime, date
+import json, os
+DATA_FILE = "data.json"
 
 
 players = []
@@ -26,6 +28,52 @@ def smart_title(text: str) -> str:
 def get_matches_sorted():
     return sorted(matches, key=lambda m: m["date"])
 
+def save_data():
+    data = {
+        "club_name": club_name,
+        "players": players,
+        "matches": [
+            {
+                "opponent": m["opponent"],
+                "date": m["date"].isoformat(),  
+                "fee": m["fee"],
+                "players": m["players"],
+                "paid": m["paid"]
+            }
+            for m in matches
+        ]
+    }
+    try:
+        with open(DATA_FILE, "w") as f:
+            json.dump(data, f, indent=2)
+    except Exception:
+        pass  
+
+def load_data():
+    global club_name, players, matches
+    if not os.path.exists(DATA_FILE):
+        return
+    try:
+        with open(DATA_FILE, "r") as f:
+            data = json.load(f)
+    except Exception:
+        return  
+
+    club_name = data.get("club_name", "")
+    players[:] = data.get("players", [])
+    matches[:] = []
+    for m in data.get("matches", []):
+        try:
+            y, mm, dd = map(int, m["date"].split("-"))
+            matches.append({
+                "opponent": m["opponent"],
+                "date": date(y, mm, dd),   
+                "fee": float(m["fee"]),
+                "players": m.get("players", []),
+                "paid": m.get("paid", [])
+            })
+        except Exception:
+            continue  
 
 club_name = ""
 
@@ -201,7 +249,34 @@ def main():
         if not club_name:
             club_name = smart_title(
                 input("Enter the name of your club: ").strip())
+            continue
+
+        choice = input("Choose option: ").strip()
+        if not choice.isdigit():
+            print("Please enter a number from the menu.")
+            continue
+
+        choice = int(choice)
+        if choice == 1:
+            add_player()
+        elif choice == 2:
+            list_players()
+        elif choice == 3:
+            add_match()
+        elif choice == 4:
+            list_matches_indexed()
+        elif choice == 5:
+            mark_attendance()
+        elif choice == 6:
+            print("Record payment not implemented yet.")  # or call record_payment() if you have it
+        elif choice == 7:
+            print("Show balances not implemented yet.")   # or call show_balances() if you have it
+        elif choice == 0:
+            print("Goodbye!")
             break
+        else:
+            print("Please choose a valid option.")
 
-
-main()
+if __name__ == "__main__":
+    load_data()   
+    main()       
