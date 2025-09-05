@@ -83,15 +83,15 @@ def add_player():
     Ask for a player's name and print a confirmation.
     """
     while True:
-        name = smart_title(input("Enter player name: ").strip())
+        name = smart_title(input("\nEnter player name: ").strip())
         if not name:
-            print("Player name cannot be empty. Please try again.")
+            print("\nPlayer name cannot be empty. Please try again.")
             continue
         if any(ch.isdigit() for ch in name):
-            print("Player name cannot contain numbers. Please try again.")
+            print("\nPlayer name cannot contain numbers. Please try again.")
             continue
         players.append(name)
-        print(f"Added player: {name}")
+        print(f"\nAdded player: {name}")
         break
 
 
@@ -99,7 +99,7 @@ def list_players():
     """
     Print all players currently stored in the players list.
     """
-    print("=== Current Players ===")
+    print("\n=== Current Players ===\n")
     for player in players:
         print(player)
 
@@ -114,18 +114,18 @@ def add_match():
     """
 
     while True:
-        opponent = smart_title(input("Enter match opponent: ").strip())
+        opponent = smart_title(input("\nEnter match opponent: ").strip())
         if not opponent:
-            print("Opponent cannot be empty. Please try again.")
+            print("\nOpponent cannot be empty. Please try again.\n")
             continue
 
-        print(f"Opponent: {opponent}")
+        print(f"\nOpponent: {opponent}\n")
         break
 
     while True:
         date_str = input("Enter match date (DD/MM/YY or DD/MM/YYYY): ").strip()
         if not date_str:
-            print("Date cannot be empty. Please try again.")
+            print("\nDate cannot be empty. Please try again.")
             continue
         try:
             parsed_date = datetime.strptime(date_str, "%d/%m/%y").date()
@@ -136,21 +136,21 @@ def add_match():
                 break
             except ValueError:
                 print(
-                    "Invalid date. Please use DD/MM/YY (e.g. 05/09/25) or DD/MM/YYYY (e.g. 05/09/2025)."
+                    "\nInvalid date. Please use DD/MM/YY (e.g. 05/09/25) or DD/MM/YYYY (e.g. 05/09/2025)."
                 )
                 continue
 
     while True:
-        fee_str = input("Enter match fee: ").strip()
+        fee_str = input("\nEnter match fee: ").strip()
         if not fee_str:
-            print("Fee cannot be empty. Please try again.")
+            print("\nFee cannot be empty. Please try again.")
             continue
         try:
             fee = float(fee_str)
-            print(f"Match fee recorded: £{fee:.2f}")
+            print(f"\nMatch fee recorded: £{fee:.2f}")
             break
         except ValueError:
-            print("Invalid fee. Please enter a number.")
+            print("\nInvalid fee. Please enter a number.")
             continue
 
     match = {
@@ -189,22 +189,22 @@ def list_matches():
     Print all matches currently stored in the matches list.
     Shows date as DD-MMM-YYYY and fee as £x.xx.
     """
-    print("=== Matches ===")
+    print("\n=== Matches ===")
 
     for match in matches:
         date_fmt = match["date"].strftime("%d-%b-%Y")
         fee_fmt = f"£{match['fee']:.2f}"
         print(
-            f'{club_name} vs {match["opponent"]} {date_fmt} Match Fee {fee_fmt}')
+            f'\n{club_name} vs {match["opponent"]} {date_fmt} Match Fee {fee_fmt}')
 
 
 def list_matches_indexed():
     """
     Print all matches with an index number so user can select one.
     """
-    print("=== Matches ===")
+    print("\n=== Matches ===\n")
     if not matches:
-        print("(no matches yet)")
+        print("\n(no matches yet)")
         return
 
     number = 1
@@ -212,7 +212,7 @@ def list_matches_indexed():
         date_fmt = match["date"].strftime("%d-%b-%Y")
         fee_fmt = f"£{match['fee']:.2f}"
         print(
-            f"{number}) {club_name} vs {match['opponent']} {date_fmt} Fee {fee_fmt}")
+            f"\n{number}) {club_name} vs {match['opponent']} {date_fmt} Fee {fee_fmt}")
         number += 1
 
 
@@ -220,13 +220,13 @@ def list_players_indexed():
     """
     Print all players with an index number so user can select one.
     """
-    print("=== Players ===")
+    print("\n=== Players ===")
     if not players:
-        print("(no players yet)")
+        print("\n(no players yet)")
         return
     number = 1
     for player in players:
-        print(f"{number}) {player}")
+        print(f"\n{number}) {player}")
         number += 1
 
 
@@ -238,7 +238,11 @@ def main():
     global club_name
     while True:
         print("\n=== Match Fees Tracker ===")
-        print("1) Add player")
+        if not club_name:
+            club_name = smart_title(
+                input("\nEnter the name of your club: ").strip())
+            continue
+        print("\n1) Add player")
         print("2) List players")
         print("3) Add match")
         print("4) List matches")
@@ -246,12 +250,13 @@ def main():
         print("6) Record payment")
         print("7) Show balances")
         print("0) Exit")
+        print()
         if not club_name:
             club_name = smart_title(
                 input("Enter the name of your club: ").strip())
             continue
 
-        choice = input("Choose option: ").strip()
+        choice = input("Choose option from menu above: ").strip()
         if not choice.isdigit():
             print("Please enter a number from the menu.")
             continue
