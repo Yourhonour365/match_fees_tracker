@@ -27,7 +27,7 @@ def get_matches_sorted():
     return sorted(matches, key=lambda m: m["date"])
 
 
-club_name = smart_title(input("Enter the name of your club: ").strip())
+club_name = ""
 
 
 def add_player():
@@ -184,17 +184,24 @@ def list_players_indexed():
 
 def main():
     """
+    Add club name if not already added.
     Display the main menu for match fees tracker
     """
-    print("\n=== Match Fees Tracker ===")
-    print("1) Add player")
-    print("2) List players")
-    print("3) Add match")
-    print("4) List matches")
-    print("5) Mark attendance")
-    print("6) Record payment")
-    print("7) Show balances")
-    print("0) Exit")
+    global club_name
+    while True:
+        print("\n=== Match Fees Tracker ===")
+        print("1) Add player")
+        print("2) List players")
+        print("3) Add match")
+        print("4) List matches")
+        print("5) Mark attendance")
+        print("6) Record payment")
+        print("7) Show balances")
+        print("0) Exit")
+        if not club_name:
+            club_name = smart_title(
+                input("Enter the name of your club: ").strip())
+            break
 
 
 main()
