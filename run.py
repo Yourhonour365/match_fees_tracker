@@ -144,6 +144,20 @@ def list_matches():
             f'{club_name} vs {match["opponent"]} {date_fmt} Match Fee {fee_fmt}')
 
 
+def list_matches_indexed():
+    """
+    Print all matches with an index number so user can select one.
+    """
+    print("=== Matches ===")
+    number = 1
+    for match in matches:
+        date_fmt = match["date"].strftime("%d-%b-%Y")
+        fee_fmt = f"£{match['fee']:.2f}"
+        print(
+            f"{number}) {club_name} vs {match['opponent']} {date_fmt} Fee {fee_fmt}")
+        number += 1
+
+
 def main():
     """
     Display the main menu for match fees tracker
@@ -159,6 +173,7 @@ def main():
 # main()
 add_player()
 add_match()
-mark_attendance()   # ← call it once
+mark_attendance()
 list_players()
 list_matches()
+list_matches_indexed()
