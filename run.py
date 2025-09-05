@@ -23,6 +23,10 @@ def smart_title(text: str) -> str:
     return " ".join(result)
 
 
+def get_matches_sorted():
+    return sorted(matches, key=lambda m: m["date"])
+
+
 club_name = smart_title(input("Enter the name of your club: ").strip())
 
 
@@ -149,8 +153,12 @@ def list_matches_indexed():
     Print all matches with an index number so user can select one.
     """
     print("=== Matches ===")
+    if not matches:
+        print("(no matches yet)")
+        return
+
     number = 1
-    for match in matches:
+    for match in get_matches_sorted():
         date_fmt = match["date"].strftime("%d-%b-%Y")
         fee_fmt = f"£{match['fee']:.2f}"
         print(
