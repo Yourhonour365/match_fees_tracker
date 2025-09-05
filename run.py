@@ -60,6 +60,8 @@ def main():
     print("=== Match Fees Tracker ===")
     print("1) Add player")
     print("2) List players")
+    print("3) Add match")
+    print("4) List matches")
     print("0) Exit")
 
 #main()
