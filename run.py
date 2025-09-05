@@ -158,6 +158,20 @@ def list_matches_indexed():
         number += 1
 
 
+def list_players_indexed():
+    """
+    Print all players with an index number so user can select one.
+    """
+    print("=== Players ===")
+    if not players:
+        print("(no players yet)")
+        return
+    number = 1
+    for player in players:
+        print(f"{number}) {player}")
+        number += 1
+
+
 def main():
     """
     Display the main menu for match fees tracker
@@ -177,3 +191,4 @@ mark_attendance()
 list_players()
 list_matches()
 list_matches_indexed()
+list_players_indexed()
