@@ -53,10 +53,10 @@ def add_match():
         try:
             # Parse into a datetime object
             parsed_date = datetime.strptime(date_str, "%d/%m/%y").date()
-
+            break
         except ValueError:
-        print("Invalid date. Please use DD/MM/YY (e.g. 05/09/25).")
-        continue
+            print("Invalid date. Please use DD/MM/YY (e.g. 05/09/25).")
+            continue
 
     while True:
         fee = input("Enter fee amount: ").strip()
@@ -72,7 +72,7 @@ def add_match():
 
     match = {
         "opponent": opponent,
-        "date": date,
+        "date": parsed_date,
         "fee": fee,
         "players": [],
         "paid": []
