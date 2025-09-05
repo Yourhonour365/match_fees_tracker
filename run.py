@@ -94,8 +94,9 @@ def list_matches():
     """
     print("=== Matches ===")
     for match in matches:
+        date_fmt = match["date"].strftime("%d-%b-%Y")  # e.g. 11-Nov-2025
         print(
-            f'{club_name} vs {match["opponent"]} {match["date"]} Match Fee £{match["fee"]:.2f}')
+            f'{club_name} vs {match["opponent"]} {date_fmt} Match Fee £{match["fee"]:.2f}')
 
 
 def main():
