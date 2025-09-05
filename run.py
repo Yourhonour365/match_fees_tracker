@@ -66,16 +66,17 @@ def add_match():
                 continue
 
     while True:
-        fee = input("Enter match fee: ").strip()
-        if not fee:
+        fee_str = input("Enter match fee: ").strip()
+        if not fee_str:
             print("Fee cannot be empty. Please try again.")
             continue
         try:
-            fee = float(fee)
+            fee = float(fee_str)
+            print(f"Match fee recorded: £{fee:.2f}")
+            break
         except ValueError:
             print("Invalid fee. Please enter a number.")
             continue
-        break
 
     match = {
         "opponent": opponent,
