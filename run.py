@@ -1,6 +1,6 @@
 players = []
 matches = []
-#fees = {}
+
 
 def add_player():
     """
@@ -29,18 +29,16 @@ def add_match():
     date = input("Enter match date (e.g. 2025-09-04): ")
     fee = float(input("Enter fee amount: "))
     
-    # Create a match dictionary to hold match details
     match = {
         "opponent": opponent,
         "date": date,
         "fee": fee,
-        "players": [],   # players who are playing in this match
-        "paid": []       # players who have paid their match fee
+        "players": [],   
+        "paid": []       
     }
     
     matches.append(match)
-    #fees[match] = {"date": date, "fee": fee}
-    #print(f"Added match: {match} on {date} (Fee: £{fee:.2f})")
+    
 
 
 def list_matches():
