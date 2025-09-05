@@ -111,6 +111,25 @@ def add_match():
     matches.append(match)
 
 
+def mark_attendance():
+    """
+    Mark a player as attended for a match.
+    """
+    if not matches or not players:
+        print("You need at least one match and one player first.")
+        return
+
+    # For now, always take the first match and first player
+    match = matches[0]
+    player = players[0]
+
+    if player not in match["players"]:
+        match["players"].append(player)
+        print(f"{player} marked as attended for {match['opponent']}.")
+    else:
+        print(f"{player} is already marked as attended.")
+
+
 def list_matches():
     """
     Print all matches currently stored in the matches list.
@@ -139,6 +158,7 @@ def main():
 
 # main()
 add_player()
-list_players()
 add_match()
+mark_attendance()   # ← call it once
+list_players()
 list_matches()
