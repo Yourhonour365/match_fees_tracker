@@ -53,7 +53,7 @@ def add_match():
         try:
             # Parse into a datetime object
             parsed_date = datetime.strptime(date_str, "%d/%m/%y").date()
-        break
+
         except ValueError:
         print("Invalid date. Please use DD/MM/YY (e.g. 05/09/25).")
         continue
