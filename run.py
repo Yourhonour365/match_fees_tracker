@@ -46,16 +46,16 @@ def add_match():
     from datetime import datetime
 
     while True:
-    date = input("Enter match date (DD/MM/YY): ").strip()
-    if not date:
-        print("Date cannot be empty. Please try again.")
-        continue
-    try:
-        # validate format and convert to a datetime object
-        parsed_date = datetime.strptime(date, "%d/%m/%y")
+        date_str = input("Enter match date (DD/MM/YY): ").strip()
+        if not date_str:
+            print("Date cannot be empty. Please try again.")
+            continue
+        try:
+            # Parse into a datetime object
+            parsed_date = datetime.strptime(date_str, "%d/%m/%y").date()
         break
-    except ValueError:
-        print("Invalid date format. Please use DD/MM/YY (e.g. 05/09/25).")
+        except ValueError:
+        print("Invalid date. Please use DD/MM/YY (e.g. 05/09/25).")
         continue
 
     while True:
