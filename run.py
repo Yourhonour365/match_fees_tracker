@@ -70,7 +70,7 @@ def add_match():
         if not opponent:
             print("Opponent cannot be empty. Please try again.")
             continue
-        # Optional confirmation echo:
+
         print(f"Opponent: {opponent}")
         break
 
@@ -123,15 +123,17 @@ def mark_attendance():
         print("You need at least one match and one player first.")
         return
 
-    # For now, always take the first match and first player
-    match = matches[0]
-    player = players[0]
+    sorted_matches = get_matches_sorted()
 
-    if player not in match["players"]:
-        match["players"].append(player)
-        print(f"{player} marked as attended for {match['opponent']}.")
-    else:
-        print(f"{player} is already marked as attended.")
+    list_matches_indexed()
+    while True:
+        choice = input("Choose match number: ").strip()
+        if choice.isdigit():
+            idx = int(choice)
+            if 1 <= idx <= len(sorted_matches):
+                match = sorted_matches[idx - 1]
+                break
+        print(f"Please enter 1–{len(sorted_matches)}.")
 
 
 def list_matches():
@@ -142,7 +144,7 @@ def list_matches():
     print("=== Matches ===")
 
     for match in matches:
-        date_fmt = match["date"].strftime("%d-%b-%Y")  # e.g. 11-Nov-2025
+        date_fmt = match["date"].strftime("%d-%b-%Y")
         fee_fmt = f"£{match['fee']:.2f}"
         print(
             f'{club_name} vs {match["opponent"]} {date_fmt} Match Fee {fee_fmt}')
