@@ -1,7 +1,29 @@
+from datetime import datetime
+
+
 players = []
 matches = []
 
-club_name = input("Enter the name of your club: ").strip().title()
+
+def smart_title(text: str) -> str:
+    """
+    Capitalise words (title case) but keep common club acronyms in uppercase.
+    Example:
+      "tigers cc"   -> "Tigers CC"
+      "ewhurst rfc" -> "Ewhurst RFC"
+      "jed smith"   -> "Jed Smith"
+    """
+    acronyms = {"cc", "fc", "rfc", "afc"}
+    result = []
+    for w in text.split():
+        if w.lower() in acronyms:
+            result.append(w.upper())
+        else:
+            result.append(w.capitalize())
+    return " ".join(result)
+
+
+club_name = smart_title(input("Enter the name of your club: ").strip())
 
 
 def add_player():
@@ -9,11 +31,11 @@ def add_player():
     Ask for a player's name and print a confirmation.
     """
     while True:
-        name = input("Enter player name: ").strip().title()
+        name = smart_title(input("Enter player name: ").strip())
         if not name:
             print("Player name cannot be empty. Please try again.")
             continue
-        if any(char.isdigit() for char in name):
+        if any(ch.isdigit() for ch in name):
             print("Player name cannot contain numbers. Please try again.")
             continue
         players.append(name)
@@ -33,36 +55,37 @@ def list_players():
 def add_match():
     """
     Ask for a match description and store it in the matches list.
-    Add a match fee that needs to be paid by each player.
-    Add a date for each match
+    Validates:
+      - opponent: non-empty, smart title-cased
+      - date: DD/MM/YY or DD/MM/YYYY, stored as datetime.date
+      - fee: numeric, echoed as £x.xx
     """
+
     while True:
-        opponent = input("Enter match opponent: ").strip().title()
+        opponent = smart_title(input("Enter match opponent: ").strip())
         if not opponent:
             print("Opponent cannot be empty. Please try again.")
             continue
+        # Optional confirmation echo:
         print(f"Opponent: {opponent}")
         break
 
-    from datetime import datetime
-
     while True:
-        date_str = input("Enter match date (DD/MM/YY): ").strip()
+        date_str = input("Enter match date (DD/MM/YY or DD/MM/YYYY): ").strip()
         if not date_str:
             print("Date cannot be empty. Please try again.")
             continue
         try:
-            # if 2 digit year
             parsed_date = datetime.strptime(date_str, "%d/%m/%y").date()
             break
         except ValueError:
             try:
-                # if 4 digit year
                 parsed_date = datetime.strptime(date_str, "%d/%m/%Y").date()
                 break
             except ValueError:
                 print(
-                    "Invalid date. Please use DD/MM/YY (05/09/25)")
+                    "Invalid date. Please use DD/MM/YY (e.g. 05/09/25) or DD/MM/YYYY (e.g. 05/09/2025)."
+                )
                 continue
 
     while True:
@@ -83,22 +106,23 @@ def add_match():
         "date": parsed_date,
         "fee": fee,
         "players": [],
-        "paid": []
+        "paid": [],
     }
-
     matches.append(match)
 
 
 def list_matches():
     """
     Print all matches currently stored in the matches list.
-    Also print the fee and date associated with each match.
+    Shows date as DD-MMM-YYYY and fee as £x.xx.
     """
     print("=== Matches ===")
+
     for match in matches:
         date_fmt = match["date"].strftime("%d-%b-%Y")  # e.g. 11-Nov-2025
+        fee_fmt = f"£{match['fee']:.2f}"
         print(
-            f'{club_name} vs {match["opponent"]} {date_fmt} Match Fee £{match["fee"]:.2f}')
+            f'{club_name} vs {match["opponent"]} {date_fmt} Match Fee {fee_fmt}')
 
 
 def main():
