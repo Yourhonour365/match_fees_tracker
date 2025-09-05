@@ -36,9 +36,30 @@ def add_match():
     Add a match fee that needs to be paid by each player.
     Add a date for each match
     """
-    opponent = input("Enter match opponent: ")
-    date = input("Enter match date (e.g. 2025-09-04): ")
-    fee = float(input("Enter fee amount: "))
+    while True:
+        opponent = input("Enter match opponent: ").strip()
+        if not opponent:
+            print("Opponent cannot be empty. Please try again.")
+            continue
+        break
+
+    while True:
+        date = input("Enter match date (e.g. 2025-09-04): ").strip()
+        if not date:
+            print("Date cannot be empty. Please try again.")
+            continue
+        break
+    while True:
+        fee = input("Enter fee amount: ").strip()
+        if not fee:
+            print("Fee cannot be empty. Please try again.")
+            continue
+        try:
+            fee = float(fee)
+        except ValueError:
+            print("Invalid fee. Please enter a number.")
+            continue
+        break
 
     match = {
         "opponent": opponent,
