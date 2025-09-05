@@ -186,19 +186,15 @@ def main():
     """
     Display the main menu for match fees tracker
     """
-    print("=== Match Fees Tracker ===")
+    print("\n=== Match Fees Tracker ===")
     print("1) Add player")
     print("2) List players")
     print("3) Add match")
     print("4) List matches")
+    print("5) Mark attendance")
+    print("6) Record payment")
+    print("7) Show balances")
     print("0) Exit")
 
 
-# main()
-add_player()
-add_match()
-mark_attendance()
-list_players()
-list_matches()
-list_matches_indexed()
-list_players_indexed()
+main()
