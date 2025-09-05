@@ -3,13 +3,23 @@ matches = []
 
 club_name = input("Enter the name of your club: ")
 
+
 def add_player():
     """
     Ask for a player's name and print a confirmation.
     """
-    name = input("Enter player name: ")
-    players.append(name)
-    print(f"Added player: {name}")
+    while True:
+        name = input("Enter player name: ").strip()
+        if not name:
+            print("Player name cannot be empty. Please try again.")
+            continue
+        if any(char.isdigit() for char in name):
+            print("Player name cannot contain numbers. Please try again.")
+            continue
+        players.append(name)
+        print(f"Added player: {name}")
+        break
+
 
 def list_players():
     """
@@ -19,27 +29,26 @@ def list_players():
     for player in players:
         print(player)
 
+
 def add_match():
     """
     Ask for a match description and store it in the matches list.
     Add a match fee that needs to be paid by each player.
     Add a date for each match
-
     """
     opponent = input("Enter match opponent: ")
     date = input("Enter match date (e.g. 2025-09-04): ")
     fee = float(input("Enter fee amount: "))
-    
+
     match = {
         "opponent": opponent,
         "date": date,
         "fee": fee,
-        "players": [],   
-        "paid": []       
+        "players": [],
+        "paid": []
     }
-    
+
     matches.append(match)
-    
 
 
 def list_matches():
@@ -48,9 +57,9 @@ def list_matches():
     Also print the fee and date associated with each match.
     """
     print("=== Matches ===")
-
     for match in matches:
-        print(f'{club_name} vs {match["opponent"]} {match["date"]} Match Fee £{match["fee"]:.2f}')
+        print(
+            f'{club_name} vs {match["opponent"]} {match["date"]} Match Fee £{match["fee"]:.2f}')
 
 
 def main():
@@ -64,9 +73,9 @@ def main():
     print("4) List matches")
     print("0) Exit")
 
-#main()
+
+# main()
 add_player()
 list_players()
 add_match()
 list_matches()
-
