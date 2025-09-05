@@ -8,3 +8,15 @@ In future, the system could even send automatic reminders to players who havenâ€
 
 The app is especially relevant for grassroots sports such as cricket, hockey, football, and rugby â€” where players typically pay small match fees per game (or even for some practices) to cover costs like teas, referees, new match balls (in cricket), and lighting costs (for hockey on astroturf at night).
 
+### Match Data Structure
+
+Each match is stored as a Python dictionary to keep all details about a match in one place:
+
+```python
+match = {
+    "opponent": "ewhurst",
+    "date": "25/09/25",
+    "fee": 5.0,
+    "players": [],   # players playing in the match
+    "paid": []       # players who have paid match fees
+}
