@@ -8,3 +8,4 @@ node_modules/
 .github/
 .venv/
 *.env
+data.json
