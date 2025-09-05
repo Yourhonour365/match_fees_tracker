@@ -43,12 +43,21 @@ def add_match():
             continue
         break
 
+    from datetime import datetime
+
     while True:
-        date = input("Enter match date (e.g. 2025-09-04): ").strip()
-        if not date:
-            print("Date cannot be empty. Please try again.")
-            continue
+    date = input("Enter match date (DD/MM/YY): ").strip()
+    if not date:
+        print("Date cannot be empty. Please try again.")
+        continue
+    try:
+        # validate format and convert to a datetime object
+        parsed_date = datetime.strptime(date, "%d/%m/%y")
         break
+    except ValueError:
+        print("Invalid date format. Please use DD/MM/YY (e.g. 05/09/25).")
+        continue
+
     while True:
         fee = input("Enter fee amount: ").strip()
         if not fee:
