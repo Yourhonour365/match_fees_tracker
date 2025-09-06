@@ -212,7 +212,7 @@ def list_matches_indexed():
     """
     Print all matches with an index number so user can select one.
     """
-    print("\n=== Matches ===\n")
+    print("\n=== Matches ===")
     if not matches:
         print("\n(no matches yet)")
         return
