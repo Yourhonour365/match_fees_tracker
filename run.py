@@ -193,7 +193,7 @@ def mark_attendance():
                 selected_player = players[player_idx - 1]
                 break
         print(f"Please enter 1–{len(players)}.")
-        
+
 def list_matches():
     """
     Print all matches currently stored in the matches list.
@@ -252,14 +252,10 @@ def main():
             club_name = smart_title(
                 input("\nEnter the name of your club: ").strip())
             continue
-        print("\n1) Add player")
-        print("2) List players")
-        print("3) Add match")
-        print("4) List matches")
-        print("5) Mark attendance")
-        print("6) Record payment")
-        print("7) Show balances")
-        print("0) Exit")
+        print(f"\n{'1) Add player':<20} {'5) Mark attendance'}")
+        print(f"{'2) List players':<20} {'6) Record payment'}")
+        print(f"{'3) Add match':<20} {'7) Show balances'}")
+        print(f"{'4) List matches':<20} {'0) Exit'}")
         print()
         if not club_name:
             club_name = smart_title(
