@@ -184,16 +184,33 @@ def mark_attendance():
                 break
         print(f"\nPlease enter 1–{len(sorted_matches)}.")
 
-    list_players_indexed()
+    available_players = [player for player in players if player not in match["players"]]
+    
+    if not available_players:
+        print(f"\nAll players are already marked as attended for this match.")
+        return
+
+    print("\n=== Available Players ===")
+    for i, player in enumerate(available_players, 1):
+        print(f"\n{i}) {player}")
     while True:
         player_choice = input("\nChoose player number: ").strip()
         if player_choice.isdigit():
             player_idx = int(player_choice)
-            if 1 <= player_idx <= len(players):
-                selected_player = players[player_idx - 1]
+            if 1 <= player_idx <= len(available_players):
+                selected_player = available_players[player_idx - 1]
                 break
-        print(f"Please enter 1–{len(players)}.")
+        print(f"Please enter 1–{len(available_players)}.")
 
+    match["players"].append(selected_player)
+    save_data()
+    
+    opponent = match["opponent"]
+    date_fmt = match["date"].strftime("%d-%b-%Y")
+    print(f"\n✓ {selected_player} marked as attended for {club_name} vs {opponent} on {date_fmt}")
+    
+    if len(match["players"]) > 1:
+        print(f"\nCurrent attendance ({len(match['players'])} players): {', '.join(match['players'])}")
 def list_matches():
     """
     Print all matches currently stored in the matches list.
