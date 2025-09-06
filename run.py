@@ -91,6 +91,7 @@ def add_player():
             print("\nPlayer name cannot contain numbers. Please try again.")
             continue
         players.append(name)
+        save_data()  
         print(f"\nAdded player: {name}")
         break
 
@@ -161,7 +162,7 @@ def add_match():
         "paid": [],
     }
     matches.append(match)
-
+    save_data()  
 
 def mark_attendance():
     """
@@ -175,15 +176,24 @@ def mark_attendance():
 
     list_matches_indexed()
     while True:
-        choice = input("Choose match number: ").strip()
+        choice = input("\nChoose match number: ").strip()
         if choice.isdigit():
             idx = int(choice)
             if 1 <= idx <= len(sorted_matches):
                 match = sorted_matches[idx - 1]
                 break
-        print(f"Please enter 1–{len(sorted_matches)}.")
+        print(f"\nPlease enter 1–{len(sorted_matches)}.")
 
-
+    list_players_indexed()
+    while True:
+        player_choice = input("\nChoose player number: ").strip()
+        if player_choice.isdigit():
+            player_idx = int(player_choice)
+            if 1 <= player_idx <= len(players):
+                selected_player = players[player_idx - 1]
+                break
+        print(f"Please enter 1–{len(players)}.")
+        
 def list_matches():
     """
     Print all matches currently stored in the matches list.
@@ -254,6 +264,7 @@ def main():
         if not club_name:
             club_name = smart_title(
                 input("Enter the name of your club: ").strip())
+            save_data()  
             continue
 
         choice = input("Choose option from menu above: ").strip()
@@ -273,9 +284,9 @@ def main():
         elif choice == 5:
             mark_attendance()
         elif choice == 6:
-            print("Record payment not implemented yet.")  # or call record_payment() if you have it
+            print("Record payment not implemented yet.")  
         elif choice == 7:
-            print("Show balances not implemented yet.")   # or call show_balances() if you have it
+            print("Show balances not implemented yet.")   
         elif choice == 0:
             print("Goodbye!")
             break
