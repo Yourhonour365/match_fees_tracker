@@ -264,7 +264,11 @@ def main():
     """
     global club_name
     while True:
-        print("\n=== Match Fees Tracker ===")
+        if club_name:
+            print(f"\n=== Match Fees Tracker - {club_name} ===")
+        else:
+            print(f"\n=== Match Fees Tracker - [Club Name Not Set] ===")
+        
         if not club_name:
             club_name = smart_title(
                 input("\nEnter the name of your club: ").strip())
@@ -272,8 +276,8 @@ def main():
         print(f"\n{'1) Add player':<20} {'5) Mark attendance'}")
         print(f"{'2) List players':<20} {'6) Record payment'}")
         print(f"{'3) Add match':<20} {'7) Show balances'}")
-        print(f"{'4) List matches':<20} {'0) Exit'}")
-        print()
+        print(f"{'4) Show fixtures':<20} {'8) View teams for matches'}")
+        print(f"{'0) Exit'}")
         if not club_name:
             club_name = smart_title(
                 input("Enter the name of your club: ").strip())
