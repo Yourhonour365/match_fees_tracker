@@ -264,12 +264,17 @@ def club_management():
         print(f"\n=== Club Management ===")
         print(f"{'1) Switch club'}")
         print(f"{'2) Delete club data'}")
-        print(f"{'0) Back to main menu'}")
+        print(f"{'b) Back to main menu'}")
         print()
         
-        choice = input("Choose option: ").strip()
+        choice = input("Choose option: ").strip().lower()
         
-        if not choice.isdigit():
+        if choice == 'b':
+            break
+        elif choice == 'e':
+            print("Goodbye!")
+            exit()
+        elif not choice.isdigit():
             print("Please enter a valid option.")
             continue
             
@@ -313,7 +318,7 @@ def main():
 
         choice = input("Choose option from menu above: ").strip()
         if choice == 'm':
-            print("Club management not implemented yet.")
+            club_management()
             continue
         elif choice == 'e':
             print("Goodbye!")
