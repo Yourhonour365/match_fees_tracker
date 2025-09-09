@@ -278,6 +278,7 @@ def main():
         print(f"{'3) Add match':<20} {'7) Show balances'}")
         print(f"{'4) Show fixtures':<20} {'8) View teams for matches'}")
         print(f"{'0) Exit'}")
+        print()
         if not club_name:
             club_name = smart_title(
                 input("Enter the name of your club: ").strip())
