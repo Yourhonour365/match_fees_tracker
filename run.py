@@ -287,6 +287,13 @@ def main():
             continue
 
         choice = input("Choose option from menu above: ").strip()
+        if choice == 'm':
+            print("Club management not implemented yet.")
+            continue
+        elif choice == 'e':
+            print("Goodbye!")
+            break
+               
         if not choice.isdigit():
             print("Please enter a number from the menu.")
             continue
