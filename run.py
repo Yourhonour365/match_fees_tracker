@@ -277,7 +277,8 @@ def main():
         print(f"{'2) List players':<20} {'6) Record payment'}")
         print(f"{'3) Add match':<20} {'7) Show balances'}")
         print(f"{'4) Show fixtures':<20} {'8) View teams for matches'}")
-        print(f"{'0) Exit'}")
+        print()
+        print(f"{'m) Club management':<20} {'e) Exit'}")
         print()
         if not club_name:
             club_name = smart_title(
