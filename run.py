@@ -256,6 +256,31 @@ def list_players_indexed():
         print(f"\n{number}) {player}")
         number += 1
 
+def club_management():
+    """
+    Handle club management options
+    """
+    while True:
+        print(f"\n=== Club Management ===")
+        print(f"{'1) Switch club'}")
+        print(f"{'2) Delete club data'}")
+        print(f"{'0) Back to main menu'}")
+        print()
+        
+        choice = input("Choose option: ").strip()
+        
+        if not choice.isdigit():
+            print("Please enter a valid option.")
+            continue
+            
+        choice = int(choice)
+        
+        if choice == 1:
+            print("Switch club not implemented yet.")
+        elif choice == 2:
+            print("Delete club data not implemented yet.")
+        else:
+            print("Please choose a valid option.")
 
 def main():
     """
