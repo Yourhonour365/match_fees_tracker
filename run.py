@@ -502,7 +502,7 @@ def make_player_inactive():
             inactive_players.append(selected_player)
             active_players.remove(selected_player)  # Remove from our working list
             made_inactive_count += 1
-            print(f"\n✓ {selected_player} has been made inactive")
+            print(f"\n✓ {selected_player.upper()} has been made inactive")
 
             # Show updated list if there are still active players
             if active_players:
