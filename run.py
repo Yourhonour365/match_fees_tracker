@@ -334,8 +334,27 @@ def mark_attendance():
         if not match["players"]:
             print(f"{'No players selected':<30} | {col1[0] if col1 else '':<18} | {col2[0] if col2 else ''}")
 
+        if not match["players"]:
+            print(f"{'No players selected':<30} | {col1[0] if col1 else '':<18} | {col2[0] if col2 else ''}")
+
     print(f"\nSelected {len(selected_matches)} match(es) for team selection.")
-    print("Team selection functionality will be enhanced in next update.")
+    print("\nOptions:")
+    print("1) Add players to matches")
+    print("2) Remove players from matches")
+    print("3) Return to main menu")
+    while True:
+        choice = input("\nChoose option: ").strip()
+        if choice == '1':
+            print("Add players functionality will be implemented next.")
+            break
+        elif choice == '2':
+            print("Remove players functionality will be implemented next.")
+            break
+        elif choice == '3':
+            break  # Return to main menu
+        else:
+            print("Please enter 1, 2, or 3")
+
 
 def list_matches():
     """
