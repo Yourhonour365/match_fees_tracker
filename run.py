@@ -24,10 +24,8 @@ def smart_title(text: str) -> str:
             result.append(w.capitalize())
     return " ".join(result)
 
-
 def get_matches_sorted():
     return sorted(matches, key=lambda m: m["date"])
-
 
 def save_data():
     data = {
@@ -49,7 +47,6 @@ def save_data():
             json.dump(data, f, indent=2)
     except Exception:
         pass
-
 
 def load_data():
     global club_name, players, matches
@@ -79,9 +76,7 @@ def load_data():
         except Exception:
             continue
 
-
 club_name = ""
-
 
 def add_player():
     """
@@ -446,6 +441,62 @@ def view_fee_balances():
     else:
         print(f"{'TOTAL':<25} {'':<10} {'':<10} -")
 
+def edit_player_name():
+    """Edit an existing player's name"""
+    if not players:
+        print("\nNo players to edit.")
+        return
+
+    sorted_players = sorted(players)
+
+    print("\n=== Edit Player Name ===")
+    print("-" * 40)
+    print(f"{'No.':<4} {'Player':<30}")
+    print("-" * 40)
+    for i, player in enumerate(sorted_players, 1):
+        print(f"{i:<4} {player:<30}")
+    print("-" * 40)
+
+    # Get player selection
+    while True:
+        choice = input("\nEnter player number to edit (or Enter to cancel): ").strip()
+        if not choice:
+            print("Edit cancelled.")
+            return
+        if choice.isdigit() and 1 <= int(choice) <= len(sorted_players):
+            player_index = int(choice) - 1
+            old_name = sorted_players[player_index]
+            break
+        print(f"Please enter 1-{len(sorted_players)}")
+
+    # Get new name
+    while True:
+        new_name = smart_title(input(f"\nEnter new name for {old_name}: ").strip())
+        if not new_name:
+            print("Name cannot be empty.")
+            continue
+        if any(ch.isdigit() for ch in new_name):
+            print("Player name cannot contain numbers.")
+            continue
+        if new_name in players and new_name != old_name:
+            print(f"{new_name} already exists. Choose a different name.")
+            continue
+        break
+
+    # Update player name everywhere
+    original_index = players.index(old_name)
+    players[original_index] = new_name
+
+    # Update in matches too
+    for match in matches:
+        if old_name in match.get("players", []):
+            match["players"] = [new_name if p == old_name else p for p in match["players"]]
+        if old_name in match.get("paid", []):
+            match["paid"] = [new_name if p == old_name else p for p in match["paid"]]
+
+    save_data()
+    print(f"\n✓ Changed '{old_name}' to '{new_name}'")
+
 def player_management():
     """Handle player management operations"""
     while True:
@@ -499,7 +550,7 @@ def player_management():
         elif choice == '1':
             add_player()
         elif choice == '2':
-            print("Edit player not implemented yet.")
+            edit_player_name()
         elif choice == '3':
             print("Make inactive not implemented yet.")
         elif choice == '4':
