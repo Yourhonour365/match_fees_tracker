@@ -176,6 +176,14 @@ def add_match():
         "players": [],
         "paid": [],
     }
+    for existing_match in matches:
+        if existing_match["opponent"] == opponent and existing_match["date"] == parsed_date:
+            print(f"\n⚠ Note: You already have {club_name} vs {opponent} on {parsed_date.strftime('%d/%m/%Y')}")
+            confirm = input("Add this match anyway? (y/n): ").strip().lower()
+            if confirm != 'y':
+                print("\nMatch not added.")
+                return
+            break
     matches.append(match)
     save_data()
 
