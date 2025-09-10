@@ -459,6 +459,66 @@ def make_player_inactive():
 
     print("\n=== Make Player Inactive ===")
 
+    # Show active players
+    total = len(active_players)
+    half = (total + 1) // 2  # Round up for odd numbers
+
+    print("-" * 64)
+    left_header = f"{'No.':<3} {'Player':<20} {'Status':<6}"
+    right_header = f"{'No.':<3} {'Player':<20} {'Status':<6}"
+    print(f"{left_header}  {right_header}")
+    print("-" * 64)
+
+    for i in range(half):
+        # Left column
+        left_no = i + 1
+        left_player = active_players[i][:20]  # Truncate if too long
+        left_line = f"{left_no:<3} {left_player:<20} {'Actv':<6}"
+
+        # Right column (if exists)
+        right_idx = i + half
+        if right_idx < total:
+            right_no = right_idx + 1
+            right_player = active_players[right_idx][:20]  # Truncate if too long
+            right_line = f"{right_no:<3} {right_player:<20} {'Actv':<6}"
+            print(f"{left_line}  {right_line}")
+        else:
+            print(left_line)
+
+    print("-" * 64)
+    # Get player selection
+    made_inactive_count = 0
+
+    while active_players:  # Continue while there are active players
+        # Get player selection
+        choice = input("\nEnter player number to make inactive (or Enter to finish): ").strip()
+        if not choice:  # Empty input - finish
+            break
+
+        if choice.isdigit() and 1 <= int(choice) <= len(active_players):
+            selected_player = active_players[int(choice) - 1]
+
+            # Make the player inactive
+            inactive_players.append(selected_player)
+            active_players.remove(selected_player)  # Remove from our working list
+            made_inactive_count += 1
+            print(f"\n✓ {selected_player} has been made inactive")
+
+            # Show updated list if there are still active players
+            if active_players:
+                print(f"\nRemaining active players: {len(active_players)}")
+            else:
+                print("\nAll players are now inactive.")
+                break
+        else:
+            print(f"Please enter 1-{len(active_players)}")
+
+    if made_inactive_count > 0:
+        save_data()
+        print(f"\nFinished. Made {made_inactive_count} player(s) inactive.")
+    else:
+        print("\nNo players were made inactive.")
+
 def edit_player_name():
     """Edit an existing player's name"""
     if not players:
