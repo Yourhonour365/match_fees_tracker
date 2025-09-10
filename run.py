@@ -318,6 +318,54 @@ def club_management():
         else:
             print("Please choose a valid option.")
 
+def record_payment():
+    """Record a match fee payment from a player"""
+    if not matches or not players:
+        print("\nYou need at least one match and one player first.")
+        return
+
+    matches_with_players = [m for m in matches if m["players"]]
+    if not matches_with_players:
+        print("\nNo matches have been played yet (no players marked).")
+        return
+
+
+    print("\n=== Select Match ===")
+    for i, match in enumerate(matches_with_players, 1):
+        date_fmt = match["date"].strftime("%d/%m/%Y")
+        print(f"{i}) {club_name} vs {match['opponent']} on {date_fmt}")
+
+
+    while True:
+        choice = input("\nChoose match number: ").strip()
+        if choice.isdigit() and 1 <= int(choice) <= len(matches_with_players):
+            selected_match = matches_with_players[int(choice) - 1]
+            break
+        print(f"Please enter 1-{len(matches_with_players)}")
+
+
+    unpaid = [p for p in selected_match["players"] if p not in selected_match["paid"]]
+    if not unpaid:
+        print("\nAll players have paid for this match!")
+        return
+
+    print("\n=== Unpaid Players ===")
+    for i, player in enumerate(unpaid, 1):
+        print(f"{i}) {player} - owes £{selected_match['fee']:.2f}")
+
+
+    while True:
+        choice = input("\nWho has paid? Choose number: ").strip()
+        if choice.isdigit() and 1 <= int(choice) <= len(unpaid):
+            player_who_paid = unpaid[int(choice) - 1]
+            break
+        print(f"Please enter 1-{len(unpaid)}")
+
+
+    selected_match["paid"].append(player_who_paid)
+    save_data()
+    print(f"\n✓ Payment recorded: {player_who_paid} paid £{selected_match['fee']:.2f}")
+
 def match_fees_menu():
     """Handle match fee operations"""
     while True:
@@ -335,7 +383,7 @@ def match_fees_menu():
         elif choice == '1':
             mark_attendance()  # Your existing function
         elif choice == '2':
-            print("Record payment not implemented yet.")
+            record_payment()
         elif choice == '3':
             print("View balances not implemented yet.")
         else:
