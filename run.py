@@ -32,6 +32,7 @@ def save_data():
     data = {
         "club_name": club_name,
         "players": players,
+        "inactive_players": inactive_players,
         "matches": [
             {
                 "opponent": m["opponent"],
@@ -50,7 +51,7 @@ def save_data():
         pass
 
 def load_data():
-    global club_name, players, matches
+    global club_name, players, matches, inactive_players
     if not os.path.exists(DATA_FILE):
         return
     try:
@@ -61,7 +62,9 @@ def load_data():
 
     club_name = data.get("club_name", "")
     players[:] = data.get("players", [])
+    inactive_players[:] = data.get("inactive_players", [])
     matches[:] = []
+
     for m in data.get("matches", []):
         try:
             y, mm, dd = map(int, m["date"].split("-"))
@@ -442,6 +445,20 @@ def view_fee_balances():
     else:
         print(f"{'TOTAL':<25} {'':<10} {'':<10} -")
 
+def make_player_inactive():
+    """Make a player inactive"""
+    if not players:
+        print("\nNo players to make inactive.")
+        return
+
+    active_players = [player for player in players if player not in inactive_players]
+
+    if not active_players:
+        print("\nNo active players to make inactive.")
+        return
+
+    print("\n=== Make Player Inactive ===")
+
 def edit_player_name():
     """Edit an existing player's name"""
     if not players:
@@ -553,7 +570,7 @@ def player_management():
         elif choice == '2':
             edit_player_name()
         elif choice == '3':
-            print("Make inactive not implemented yet.")
+            make_player_inactive()
         elif choice == '4':
             print("Select for matches not implemented yet.")
         else:
