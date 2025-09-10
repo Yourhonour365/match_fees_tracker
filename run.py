@@ -617,11 +617,11 @@ def player_management():
 
         # Show menu options in two columns
         print("\nOptions:")
-        print("1) Add player                3) Make player inactive")
-        print("2) Edit player name          4) Select players for matches")
+        print("1) Add player                4) Make player inactive")
+        print("2) Edit player name          5) Make player active")
+        print("3) Select players for matches")
         print()
         print("b) Back to main menu")
-        print()
 
         choice = input("Choose option from player menu above:").strip().lower()
 
@@ -632,9 +632,11 @@ def player_management():
         elif choice == '2':
             edit_player_name()
         elif choice == '3':
-            make_player_inactive()
+            mark_attendance()
         elif choice == '4':
-            print("Select for matches not implemented yet.")
+            make_player_inactive()
+        elif choice == '5':
+            print("Make player active not implemented yet.")
         else:
             print("Please choose a valid option.")
 
