@@ -395,6 +395,47 @@ def record_payment():
     save_data()
     print(f"\n✓ Payment recorded: {player_who_paid} paid £{selected_match['fee']:.2f}")
 
+def view_fee_balances():
+    """Show fee balances for all players"""
+    if not players:
+        print("\nNo players registered yet.")
+        return
+
+    print("\n=== Match Fee Balances ===")
+    print("-" * 60)
+    print(f"{'Player':<25} {'Matches':<10} {'Paid':<10} {'Due':<10}")
+    print("-" * 60)
+
+    total_outstanding = 0
+
+    for player in sorted(players):  # Added sorted() here
+        total_owed = 0
+        total_paid = 0
+        matches_played = 0
+
+        for match in matches:
+            if player in match.get("players", []):
+                matches_played += 1
+                total_owed += match["fee"]
+                if player in match.get("paid", []):
+                    total_paid += match["fee"]
+
+        balance_due = total_owed - total_paid
+        total_outstanding += balance_due
+
+        # Format the amounts - keeping consistent width
+        paid_str = f"£{total_paid:.2f}" if total_paid > 0 else "-"
+        due_str = f"£{balance_due:.2f}" if balance_due > 0 else "-"
+        matches_str = str(matches_played) if matches_played > 0 else "-"
+
+        print(f"{player:<25} {matches_str:<10} {paid_str:<10} {due_str:<10}")
+
+    print("-" * 60)
+    if total_outstanding > 0:
+        print(f"{'TOTAL':<25} {'':<10} {'':<10} £{total_outstanding:.2f}")
+    else:
+        print(f"{'TOTAL':<25} {'':<10} {'':<10} -")
+
 def match_fees_menu():
     """Handle match fee operations"""
     while True:
@@ -478,7 +519,7 @@ def main():
         elif choice == 7:
             list_matches()
         elif choice == 8:
-            print("Match fee balances not implemented yet.")
+            view_fee_balances()
         else:
             print("Please choose a valid option.")
 
