@@ -35,7 +35,7 @@ def save_data():
         "matches": [
             {
                 "opponent": m["opponent"],
-                "date": m["date"].isoformat(),  
+                "date": m["date"].isoformat(),
                 "fee": m["fee"],
                 "players": m["players"],
                 "paid": m["paid"]
@@ -47,7 +47,7 @@ def save_data():
         with open(DATA_FILE, "w") as f:
             json.dump(data, f, indent=2)
     except Exception:
-        pass  
+        pass
 
 def load_data():
     global club_name, players, matches
@@ -57,7 +57,7 @@ def load_data():
         with open(DATA_FILE, "r") as f:
             data = json.load(f)
     except Exception:
-        return  
+        return
 
     club_name = data.get("club_name", "")
     players[:] = data.get("players", [])
@@ -67,13 +67,13 @@ def load_data():
             y, mm, dd = map(int, m["date"].split("-"))
             matches.append({
                 "opponent": m["opponent"],
-                "date": date(y, mm, dd),   
+                "date": date(y, mm, dd),
                 "fee": float(m["fee"]),
                 "players": m.get("players", []),
                 "paid": m.get("paid", [])
             })
         except Exception:
-            continue  
+            continue
 
 club_name = ""
 
@@ -91,7 +91,7 @@ def add_player():
             print("\nPlayer name cannot contain numbers. Please try again.")
             continue
         players.append(name)
-        save_data()  
+        save_data()
         print(f"\nAdded player: {name}")
         break
 
@@ -162,7 +162,7 @@ def add_match():
         "paid": [],
     }
     matches.append(match)
-    save_data()  
+    save_data()
 
 def mark_attendance():
     """
@@ -185,7 +185,7 @@ def mark_attendance():
         print(f"\nPlease enter 1–{len(sorted_matches)}.")
 
     available_players = [player for player in players if player not in match["players"]]
-    
+
     if not available_players:
         print(f"\nAll players are already marked as attended for this match.")
         return
@@ -204,11 +204,11 @@ def mark_attendance():
 
     match["players"].append(selected_player)
     save_data()
-    
+
     opponent = match["opponent"]
     date_fmt = match["date"].strftime("%d-%b-%Y")
     print(f"\n✓ {selected_player} marked as attended for {club_name} vs {opponent} on {date_fmt}")
-    
+
     if len(match["players"]) > 1:
         print(f"\nCurrent attendance ({len(match['players'])} players): {', '.join(match['players'])}")
 def list_matches():
@@ -266,9 +266,9 @@ def club_management():
         print(f"{'2) Delete club data'}")
         print(f"{'b) Back to main menu'}")
         print()
-        
+
         choice = input("Choose option: ").strip().lower()
-        
+
         if choice == 'b':
             break
         elif choice == 'e':
@@ -277,9 +277,9 @@ def club_management():
         elif not choice.isdigit():
             print("Please enter a valid option.")
             continue
-            
+
         choice = int(choice)
-        
+
         if choice == 1:
             print("Switch club not implemented yet.")
         elif choice == 2:
@@ -298,12 +298,12 @@ def main():
             print(f"\n=== Match Fees Tracker - {club_name} ===")
         else:
             print(f"\n=== Match Fees Tracker - [Club Name Not Set] ===")
-        
+
         if not club_name:
             club_name = smart_title(
                 input("\nEnter the name of your club: ").strip())
             continue
-        
+
         print(f"\nMANAGE:")
         print(f"{'1) Players':<20} {'3) Fixtures'}")
         print(f"{'2) Team selection':<20} {'4) Match fee payments'}")
@@ -311,14 +311,14 @@ def main():
         print(f"REPORTS:")
         print(f"{'5) Player list':<20} {'7) Fixture list'}")
         print(f"{'6) Team sheets':<20} {'8) Match fee balances'}")
-        print()  
+        print()
         print(f"{'m) Club management':<20} {'e) Exit'}")
-        print()  
+        print()
 
         if not club_name:
             club_name = smart_title(
                 input("Enter the name of your club: ").strip())
-            save_data()  
+            save_data()
             continue
 
         choice = input("Choose option from menu above: ").strip()
@@ -328,7 +328,7 @@ def main():
         elif choice == 'e':
             print("Goodbye!")
             break
-               
+
         if not choice.isdigit():
             print("Please enter a number from the menu.")
             continue
@@ -347,12 +347,12 @@ def main():
         elif choice == 6:
             print("Team sheets not implemented yet.")
         elif choice == 7:
-            list_matches()   
+            list_matches()
         elif choice == 8:
             print("Match fee balances not implemented yet.")
         else:
             print("Please choose a valid option.")
 
 if __name__ == "__main__":
-    load_data()   
-    main()       
+    load_data()
+    main()
