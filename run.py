@@ -348,6 +348,8 @@ def main():
             print("Team sheets not implemented yet.")
         elif choice == 7:
             list_matches()   
+        elif choice == 8:
+            print("Match fee balances not implemented yet.")
         elif choice == 0:
             print("Goodbye!")
             break
