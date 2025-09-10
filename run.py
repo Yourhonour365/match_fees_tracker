@@ -337,17 +337,17 @@ def main():
         if choice == 1:
             add_player()
         elif choice == 2:
-            list_players()
+            mark_attendance()
         elif choice == 3:
             add_match()
         elif choice == 4:
             list_matches_indexed()
         elif choice == 5:
-            mark_attendance()
+            list_players()
         elif choice == 6:
-            print("Record payment not implemented yet.")  
+            print("Team sheets not implemented yet.")
         elif choice == 7:
-            print("Show balances not implemented yet.")   
+            list_matches()   
         elif choice == 0:
             print("Goodbye!")
             break
