@@ -321,7 +321,7 @@ def main():
         print(f"{'1) Players':<20} {'3) Fixtures'}")
         print(f"{'2) Team selection':<20} {'4) Match fee payments'}")
         print()
-        print(f"REPORTS:")
+        print("REPORTS:")
         print(f"{'5) Player list':<20} {'7) Fixture list'}")
         print(f"{'6) Team sheets':<20} {'8) Match fee balances'}")
         print()
