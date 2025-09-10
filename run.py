@@ -448,27 +448,30 @@ def player_management():
             total = len(sorted_players)
             half = (total + 1) // 2  # Round up for odd numbers
 
-            print("-" * 70)
-            print(f"{'No.':<5} {'Player':<20} {'Status':<6}  {'No.':<5} {'Player':<20} {'Status':<6}")
-            print("-" * 70)
+            print("-" * 64)
+            # Fixed spacing in header
+            left_header = f"{'No.':<3} {'Player':<20} {'Status':<6}"
+            right_header = f"{'No.':<3} {'Player':<20} {'Status':<6}"
+            print(f"{left_header}  {right_header}")
+            print("-" * 64)
 
             for i in range(half):
                 # Left column
                 left_no = i + 1
-                left_player = sorted_players[i]
-                left_line = f"{left_no:<5} {left_player:<20} {'Actv':<6}"
+                left_player = sorted_players[i][:20]  # Truncate if too long
+                left_line = f"{left_no:<3} {left_player:<20} {'Actv':<6}"
 
                 # Right column (if exists)
                 right_idx = i + half
                 if right_idx < total:
                     right_no = right_idx + 1
-                    right_player = sorted_players[right_idx]
-                    right_line = f"{right_no:<5} {right_player:<20} {'Actv':<6}"
+                    right_player = sorted_players[right_idx][:20]  # Truncate if too long
+                    right_line = f"{right_no:<3} {right_player:<20} {'Actv':<6}"
                     print(f"{left_line}  {right_line}")
                 else:
                     print(left_line)
 
-            print("-" * 70)
+            print("-" * 64)
             print(f"Total: {total} players")
 
         # Show menu options in two columns
