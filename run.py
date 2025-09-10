@@ -278,7 +278,11 @@ def mark_attendance():
             # Parse comma-separated numbers
             match_numbers = [int(x.strip()) for x in choice.split(',')]
 
-            # Validate all numbers are in range
+            # Validate all numbers are in range and limit to 4 matches
+            if len(match_numbers) > 4:
+                print("Maximum 4 matches can be selected at once")
+                continue
+
             valid_numbers = all(1 <= num <= len(filtered_matches) for num in match_numbers)
 
             if valid_numbers and match_numbers:
@@ -292,56 +296,43 @@ def mark_attendance():
     # Show team selection table for selected matches
     print("\n=== Team Selection ===")
 
-    # For now, show first two matches if multiple selected (we'll handle more later)
-    display_matches = selected_matches[:2]
+    # Display matches vertically with available players in columns
+    for i, match in enumerate(selected_matches, 1):
+        date_fmt = match["date"].strftime("%d %b %y")
+        header = f"{i}. {date_fmt} VS {match['opponent']}".upper()
 
-    # Create headers
-    if len(display_matches) == 1:
-        match1 = display_matches[0]
-        date1 = match1["date"].strftime("%d %b %y")
-        print(f"\n{date1} vs {match1['opponent']}")
-        print("-" * 30)
-        for player in match1["players"]:
-            status = " (Inac)" if player in inactive_players else ""
-            print(f"{player}{status}")
-    else:
-        match1, match2 = display_matches[0], display_matches[1]
-        date1 = match1["date"].strftime("%d %b %y")
-        date2 = match2["date"].strftime("%d %b %y")
+        # Get available players for this match
+        active_players = [p for p in players if p not in inactive_players]
+        available_players = [p for p in active_players if p not in match["players"]]
 
-        header1 = f"{date1} vs {match1['opponent']}"
-        header2 = f"{date2} vs {match2['opponent']}"
+        # Split available players into two columns
+        half = (len(available_players) + 1) // 2
+        col1 = available_players[:half]
+        col2 = available_players[half:]
 
-        print(f"{header1:<30} | {header2}")
-        print("-" * 30 + "-|-" + "-" * 30)
+        print(f"\n{header:<30} | Available Players")
+        print("-" * 30 + "-|-" + "-" * 40)
 
-        # Show selected players side by side
-        max_players = max(len(match1["players"]), len(match2["players"]))
-        for i in range(max_players):
-            left_player = match1["players"][i] if i < len(match1["players"]) else ""
-            right_player = match2["players"][i] if i < len(match2["players"]) else ""
+        # Show selected players and available players side by side
+        max_rows = max(len(match["players"]), len(col1))
 
-            # Add inactive status
-            if left_player and left_player in inactive_players:
-                left_player += " (Inac)"
-            if right_player and right_player in inactive_players:
-                right_player += " (Inac)"
+        for row in range(max_rows):
+            # Selected player column
+            if row < len(match["players"]):
+                player = match["players"][row]
+                status = " (Inac)" if player in inactive_players else ""
+                selected_display = f" {row+1}. {player}{status}"
+            else:
+                selected_display = ""
 
-            print(f"{left_player:<30} | {right_player}")
+            # Available players columns
+            avail1 = col1[row] if row < len(col1) else ""
+            avail2 = col2[row] if row < len(col2) else ""
 
-    # Show available players
-    active_players = [p for p in players if p not in inactive_players]
-    all_selected = set()
-    for match in selected_matches:
-        all_selected.update(match["players"])
+            print(f"{selected_display:<30} | {avail1:<18} | {avail2}")
 
-    available_players = [p for p in active_players if p not in all_selected]
-
-    if available_players:
-        print(f"\nAVAILABLE PLAYERS")
-        print("-" * 17)
-        for player in sorted(available_players):
-            print(player)
+        if not match["players"]:
+            print(f"{'No players selected':<30} | {col1[0] if col1 else '':<18} | {col2[0] if col2 else ''}")
 
     print(f"\nSelected {len(selected_matches)} match(es) for team selection.")
     print("Team selection functionality will be enhanced in next update.")
