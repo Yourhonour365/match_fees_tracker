@@ -208,17 +208,66 @@ def mark_attendance():
         print("You need at least one match and one player first.")
         return
 
-    sorted_matches = get_matches_sorted()
+    while True:  # Loop for filter selection
+        # Show filter options
+        print("\n=== Team Selection ===")
+        print("Show matches:")
+        print("1) Recent + upcoming (last 2 weeks + next 2 weeks)")
+        print("2) Last month's matches")
+        print("3) Next month's matches")
+        print("4) All matches")
+        print("b) Back to main menu")
+        print()
 
-    list_matches_indexed()
+        filter_choice = input("Choose filter: ").strip().lower()
+        if filter_choice == 'b':
+            return
+        if filter_choice not in ['1', '2', '3', '4']:
+            print("Please enter 1, 2, 3, 4, or b")
+            continue
+
+        filter_choice = int(filter_choice)
+
+        # Filter matches based on selection
+        from datetime import timedelta
+        today = datetime.now().date()
+
+        if filter_choice == 1:  # Recent + upcoming (4 weeks total)
+            start_date = today - timedelta(days=14)
+            end_date = today + timedelta(days=14)
+            filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+        elif filter_choice == 2:  # Last month
+            start_date = today - timedelta(days=30)
+            end_date = today
+            filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+        elif filter_choice == 3:  # Next month
+            start_date = today
+            end_date = today + timedelta(days=30)
+            filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+        elif filter_choice == 4:  # All matches
+            filtered_matches = get_matches_sorted()
+
+        if not filtered_matches:
+            print("\nNo matches found for the selected period. Try a different filter.")
+            continue  # Go back to filter menu
+
+        break  # Exit loop if we have matches
+
+    # Display filtered matches (we'll update this format in next step)
+    print("\n=== Matches ===")
+    for i, match in enumerate(filtered_matches, 1):
+        date_fmt = match["date"].strftime("%d-%b-%Y")
+        fee_fmt = f"£{match['fee']:.2f}"
+        print(f"{i}) {club_name} vs {match['opponent']} {date_fmt} Fee {fee_fmt}")
+
     while True:
         choice = input("\nChoose match number: ").strip()
         if choice.isdigit():
             idx = int(choice)
-            if 1 <= idx <= len(sorted_matches):
-                match = sorted_matches[idx - 1]
+            if 1 <= idx <= len(filtered_matches):
+                match = filtered_matches[idx - 1]
                 break
-        print(f"\nPlease enter 1–{len(sorted_matches)}.")
+        print(f"\nPlease enter 1–{len(filtered_matches)}.")
 
     available_players = [player for player in players if player not in match["players"]]
 
