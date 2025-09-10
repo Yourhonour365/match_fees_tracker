@@ -85,16 +85,29 @@ club_name = ""
 
 def add_player():
     """
-    Ask for a player's name and print a confirmation.
+    Ask for player names and print confirmations.
+    Allows adding multiple players.
     """
+    print("\n=== Add Players ===")
+    print("Enter player names one at a time.")
+    print("Press Enter with empty name when finished.\n")
+
+    added_count = 0
+
     while True:
-        name = smart_title(input("\nEnter player name: ").strip())
-        if not name:
-            print("\nPlayer name cannot be empty. Please try again.")
-            continue
+        name = smart_title(input("Enter player name (or Enter to finish): ").strip())
+
+        if not name:  # Empty input - finish adding
+            if added_count == 0:
+                print("\nNo players added.")
+            else:
+                print(f"\nFinished. Added {added_count} player(s).")
+            break
+
         if any(ch.isdigit() for ch in name):
-            print("\nPlayer name cannot contain numbers. Please try again.")
+            print("Player name cannot contain numbers. Please try again.")
             continue
+
         if name in players:
             print(f"\n{name} already exists in the player list.")
             print("\nTo differentiate players with the same name, consider adding:")
@@ -105,11 +118,13 @@ def add_player():
             print("  • Team/role (e.g., John Smith (Captain), John Smith (Keeper))")
             print("\nPlease enter a unique identifier for this player.")
             continue
+
         players.append(name)
         save_data()
-        print(f"\nAdded player: {name}")
-        break
+        added_count += 1
+        print(f"✓ Added: {name}")
 
+    return  # Returns to player_management menu
 
 def list_players():
     """
@@ -118,7 +133,6 @@ def list_players():
     print("\n=== Current Players ===\n")
     for player in players:
         print(player)
-
 
 def add_match():
     """
@@ -187,7 +201,6 @@ def add_match():
     matches.append(match)
     save_data()
 
-
 def mark_attendance():
     """
     Mark a player as attended for a match.
@@ -239,7 +252,6 @@ def mark_attendance():
         print(
             f"\nCurrent attendance ({len(match['players'])} players): {', '.join(match['players'])}"
         )
-
 
 def list_matches():
     """
@@ -301,7 +313,6 @@ def list_matches_indexed():
         )
         number += 1
 
-
 def list_players_indexed():
     """
     Print all players with an index number so user can select one.
@@ -314,7 +325,6 @@ def list_players_indexed():
     for player in players:
         print(f"\n{number}) {player}")
         number += 1
-
 
 def club_management():
     """
@@ -482,7 +492,7 @@ def player_management():
         print("b) Back to main menu")
         print()
 
-        choice = input("Choose option: ").strip().lower()
+        choice = input("Choose option from player menu above:").strip().lower()
 
         if choice == 'b':
             break
