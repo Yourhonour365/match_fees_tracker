@@ -598,14 +598,16 @@ def player_management():
                 # Left column
                 left_no = i + 1
                 left_player = sorted_players[i][:20]  # Truncate if too long
-                left_line = f"{left_no:<3} {left_player:<20} {'Actv':<6}"
+                left_status = 'Inac' if sorted_players[i] in inactive_players else 'Actv'
+                left_line = f"{left_no:<3} {left_player:<20} {left_status:<6}"
 
                 # Right column (if exists)
                 right_idx = i + half
                 if right_idx < total:
                     right_no = right_idx + 1
                     right_player = sorted_players[right_idx][:20]  # Truncate if too long
-                    right_line = f"{right_no:<3} {right_player:<20} {'Actv':<6}"
+                    right_status = 'Inac' if sorted_players[right_idx] in inactive_players else 'Actv'
+                    right_line = f"{right_no:<3} {right_player:<20} {right_status:<6}"
                     print(f"{left_line}  {right_line}")
                 else:
                     print(left_line)
