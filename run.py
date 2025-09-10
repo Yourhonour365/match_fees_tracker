@@ -7,6 +7,62 @@ players = []
 matches = []
 inactive_players = []
 
+def create_demo_data():
+    """Create demo data for Heroku deployment when no data.json exists"""
+    global club_name, players, matches, inactive_players
+
+    club_name = "Demo Rugby Club"
+
+    players = [
+        "Antoine Dupont", "Ardie Savea", "Ben Earl", "Bundee Aki",
+        "Caelan Doris", "Dan Sheehan", "Duhan van der Merwe", "Eben Etzebeth",
+        "Faf de Klerk", "Finn Russell", "Handré Pollard", "Hugo Keenan",
+        "Jordie Barrett", "Malcolm Marx", "Owen Farrell", "Romain Ntamack",
+        "Siya Kolisi", "Thomas Ramos", "Will Jordan", "Will Skelton"
+    ]
+
+    inactive_players = ["Owen Farrell"]  # Making one player inactive for demo
+
+    # Create demo matches
+    from datetime import date
+    matches = [
+        {
+            "opponent": "Dublin RFC",
+            "date": date(2025, 9, 15),
+            "fee": 10.0,
+            "players": ["Antoine Dupont", "Ardie Savea", "Ben Earl", "Bundee Aki",
+                       "Caelan Doris", "Dan Sheehan", "Duhan van der Merwe"],
+            "paid": ["Antoine Dupont", "Ardie Savea"]
+        },
+        {
+            "opponent": "Edinburgh RFC",
+            "date": date(2025, 9, 22),
+            "fee": 10.0,
+            "players": ["Finn Russell", "Hugo Keenan", "Siya Kolisi"],
+            "paid": []
+        },
+        {
+            "opponent": "London RFC",
+            "date": date(2025, 9, 29),
+            "fee": 10.0,
+            "players": [],
+            "paid": []
+        },
+        {
+            "opponent": "Cape Town RFC",
+            "date": date(2025, 10, 6),
+            "fee": 10.0,
+            "players": [],
+            "paid": []
+        },
+        {
+            "opponent": "Auckland RFC",
+            "date": date(2025, 10, 13),
+            "fee": 10.0,
+            "players": [],
+            "paid": []
+        }
+    ]
 
 def smart_title(text: str) -> str:
     """
@@ -53,7 +109,9 @@ def save_data():
 def load_data():
     global club_name, players, matches, inactive_players
     if not os.path.exists(DATA_FILE):
+        create_demo_data()
         return
+
     try:
         with open(DATA_FILE, "r") as f:
             data = json.load(f)
@@ -354,7 +412,6 @@ def mark_attendance():
             break  # Return to main menu
         else:
             print("Please enter 1, 2, or 3")
-
 
 def list_matches():
     """
