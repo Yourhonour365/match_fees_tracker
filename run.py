@@ -513,7 +513,19 @@ def club_management():
         if choice == 1:
             print("Switch club not implemented yet.")
         elif choice == 2:
-            print("Delete club data not implemented yet.")
+            confirm = input("Are you sure you want to delete all club data? This cannot be undone. (yes/no): ").strip().lower()
+            if confirm == 'yes':
+                global club_name, players, matches, inactive_players
+                club_name = ""
+                players.clear()
+                matches.clear()
+                inactive_players.clear()
+                # Delete the data file if it exists
+                if os.path.exists(DATA_FILE):
+                    os.remove(DATA_FILE)
+                print("All club data has been deleted.")
+            else:
+                print("Delete cancelled.")
         else:
             print("Please choose a valid option.")
 
