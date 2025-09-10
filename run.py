@@ -95,6 +95,16 @@ def add_player():
         if any(ch.isdigit() for ch in name):
             print("\nPlayer name cannot contain numbers. Please try again.")
             continue
+        if name in players:
+            print(f"\n{name} already exists in the player list.")
+            print("\nTo differentiate players with the same name, consider adding:")
+            print("  • Junior/Senior (e.g., John Smith Jr, John Smith Sr)")
+            print("  • Age group (e.g., John Smith U15, John Smith Adult)")
+            print("  • Nickname (e.g., John 'Smudge' Smith)")
+            print("  • Middle initial (e.g., John A Smith, John B Smith)")
+            print("  • Team/role (e.g., John Smith (Captain), John Smith (Keeper))")
+            print("\nPlease enter a unique identifier for this player.")
+            continue
         players.append(name)
         save_data()
         print(f"\nAdded player: {name}")
