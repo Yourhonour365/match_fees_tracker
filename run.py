@@ -318,6 +318,28 @@ def club_management():
         else:
             print("Please choose a valid option.")
 
+def match_fees_menu():
+    """Handle match fee operations"""
+    while True:
+        print("\n=== Match Fees ===")
+        print("1) Mark who played (creates fee obligation)")
+        print("2) Record fee payment")
+        print("3) View fee balances")
+        print("b) Back to main menu")
+        print()
+
+        choice = input("Choose option: ").strip().lower()
+
+        if choice == 'b':
+            break
+        elif choice == '1':
+            mark_attendance()  # Your existing function
+        elif choice == '2':
+            print("Record payment not implemented yet.")
+        elif choice == '3':
+            print("View balances not implemented yet.")
+        else:
+            print("Please choose a valid option.")
 
 def main():
     """
@@ -337,7 +359,7 @@ def main():
 
         print("\nMANAGE:")
         print(f"{'1) Players':<20} {'3) Fixtures'}")
-        print(f"{'2) Team selection':<20} {'4) Match fee payments'}")
+        print(f"{'2) Team selection':<20} {'4) Match fees'}")
         print()
         print("REPORTS:")
         print(f"{'5) Player list':<20} {'7) Fixture list'}")
@@ -371,7 +393,7 @@ def main():
         elif choice == 3:
             add_match()
         elif choice == 4:
-            print("Match fee payments not implemented yet.")
+            match_fees_menu()
         elif choice == 5:
             list_players()
         elif choice == 6:
