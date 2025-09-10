@@ -317,7 +317,7 @@ def main():
             club_name = smart_title(input("\nEnter the name of your club: ").strip())
             continue
 
-        print(f"\nMANAGE:")
+        print("\nMANAGE:")
         print(f"{'1) Players':<20} {'3) Fixtures'}")
         print(f"{'2) Team selection':<20} {'4) Match fee payments'}")
         print()
