@@ -253,6 +253,35 @@ def list_matches():
         fee_fmt = f"£{match['fee']:.2f}"
         print(f'\n{club_name} vs {match["opponent"]} {date_fmt} Match Fee {fee_fmt}')
 
+def show_team_sheets():
+    """Display team sheets for all matches"""
+    if not matches:
+        print("\nNo matches recorded yet.")
+        return
+
+    sorted_matches = get_matches_sorted()
+
+    print("\n=== Team Sheets ===")
+    for match in sorted_matches:
+        date_fmt = match["date"].strftime("%d/%m/%Y")
+        fee_fmt = f"£{match['fee']:.2f}"
+
+        # Determine if played or fixture
+        if match["players"]:
+            status = f" (Played - {len(match['players'])} players)"
+        else:
+            status = " (Fixture - no team selected yet)"
+
+        print(f"\n{club_name} vs {match['opponent']} - {date_fmt}{status}")
+        print(f"Match Fee: {fee_fmt}")
+
+        if match["players"]:
+            print("Team:")
+            for player in match["players"]:
+                paid_status = " ✓ Paid" if player in match.get("paid", []) else " - Fee due"
+                print(f"  • {player}{paid_status}")
+        else:
+            print("No players selected yet")
 
 def list_matches_indexed():
     """
@@ -445,7 +474,7 @@ def main():
         elif choice == 5:
             list_players()
         elif choice == 6:
-            print("Team sheets not implemented yet.")
+            show_team_sheets()
         elif choice == 7:
             list_matches()
         elif choice == 8:
