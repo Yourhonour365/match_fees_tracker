@@ -436,6 +436,64 @@ def view_fee_balances():
     else:
         print(f"{'TOTAL':<25} {'':<10} {'':<10} -")
 
+def player_management():
+    """Handle player management operations"""
+    while True:
+        # Show player table
+        print("\n=== Player Management ===")
+        if not players:
+            print("\nNo players registered yet.")
+        else:
+            sorted_players = sorted(players)
+            total = len(sorted_players)
+            half = (total + 1) // 2  # Round up for odd numbers
+
+            print("-" * 70)
+            print(f"{'No.':<5} {'Player':<20} {'Status':<6}  {'No.':<5} {'Player':<20} {'Status':<6}")
+            print("-" * 70)
+
+            for i in range(half):
+                # Left column
+                left_no = i + 1
+                left_player = sorted_players[i]
+                left_line = f"{left_no:<5} {left_player:<20} {'Actv':<6}"
+
+                # Right column (if exists)
+                right_idx = i + half
+                if right_idx < total:
+                    right_no = right_idx + 1
+                    right_player = sorted_players[right_idx]
+                    right_line = f"{right_no:<5} {right_player:<20} {'Actv':<6}"
+                    print(f"{left_line}  {right_line}")
+                else:
+                    print(left_line)
+
+            print("-" * 70)
+            print(f"Total: {total} players")
+
+        # Show menu options in two columns
+        print("\nOptions:")
+        print("1) Add player                3) Make player inactive")
+        print("2) Edit player name          4) Select players for matches")
+        print()
+        print("b) Back to main menu")
+        print()
+
+        choice = input("Choose option: ").strip().lower()
+
+        if choice == 'b':
+            break
+        elif choice == '1':
+            add_player()
+        elif choice == '2':
+            print("Edit player not implemented yet.")
+        elif choice == '3':
+            print("Make inactive not implemented yet.")
+        elif choice == '4':
+            print("Select for matches not implemented yet.")
+        else:
+            print("Please choose a valid option.")
+
 def match_fees_menu():
     """Handle match fee operations"""
     while True:
@@ -505,7 +563,7 @@ def main():
 
         choice = int(choice)
         if choice == 1:
-            add_player()
+            player_management()
         elif choice == 2:
             mark_attendance()
         elif choice == 3:
