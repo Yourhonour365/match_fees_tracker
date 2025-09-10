@@ -418,12 +418,15 @@ def list_matches():
     Print all matches currently stored in the matches list.
     Shows date as DD-MMM-YYYY and fee as £x.xx.
     """
-    print("\n=== Matches ===")
+    print("\n=== Fixture List ===")
+    if not matches:
+        print("\nNo matches scheduled yet.")
+        return
 
-    for match in matches:
-        date_fmt = match["date"].strftime("%d-%b-%Y")
+    for match in get_matches_sorted():
+        date_fmt = match["date"].strftime("%d %b %y")
         fee_fmt = f"£{match['fee']:.2f}"
-        print(f'\n{club_name} vs {match["opponent"]} {date_fmt} Match Fee {fee_fmt}')
+        print(f"{date_fmt} vs {match['opponent']} - {fee_fmt}")
 
 def show_team_sheets():
     """Display team sheets for all matches"""
