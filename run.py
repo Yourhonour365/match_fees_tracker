@@ -289,37 +289,62 @@ def mark_attendance():
         except ValueError:
             print("Please enter valid numbers separated by commas (e.g. 1,3,5)")
 
-    available_players = [player for player in players if player not in match["players"]]
+    # Show team selection table for selected matches
+    print("\n=== Team Selection ===")
 
-    if not available_players:
-        print(f"\nAll players are already marked as attended for this match.")
-        return
+    # For now, show first two matches if multiple selected (we'll handle more later)
+    display_matches = selected_matches[:2]
 
-    print("\n=== Available Players ===")
-    for i, player in enumerate(available_players, 1):
-        print(f"\n{i}) {player}")
-    while True:
-        player_choice = input("\nChoose player number: ").strip()
-        if player_choice.isdigit():
-            player_idx = int(player_choice)
-            if 1 <= player_idx <= len(available_players):
-                selected_player = available_players[player_idx - 1]
-                break
-        print(f"Please enter 1–{len(available_players)}.")
+    # Create headers
+    if len(display_matches) == 1:
+        match1 = display_matches[0]
+        date1 = match1["date"].strftime("%d %b %y")
+        print(f"\n{date1} vs {match1['opponent']}")
+        print("-" * 30)
+        for player in match1["players"]:
+            status = " (Inac)" if player in inactive_players else ""
+            print(f"{player}{status}")
+    else:
+        match1, match2 = display_matches[0], display_matches[1]
+        date1 = match1["date"].strftime("%d %b %y")
+        date2 = match2["date"].strftime("%d %b %y")
 
-    match["players"].append(selected_player)
-    save_data()
+        header1 = f"{date1} vs {match1['opponent']}"
+        header2 = f"{date2} vs {match2['opponent']}"
 
-    opponent = match["opponent"]
-    date_fmt = match["date"].strftime("%d-%b-%Y")
-    print(
-        f"\n✓ {selected_player} marked as attended for {club_name} vs {opponent} on {date_fmt}"
-    )
+        print(f"{header1:<30} | {header2}")
+        print("-" * 30 + "-|-" + "-" * 30)
 
-    if len(match["players"]) > 1:
-        print(
-            f"\nCurrent attendance ({len(match['players'])} players): {', '.join(match['players'])}"
-        )
+        # Show selected players side by side
+        max_players = max(len(match1["players"]), len(match2["players"]))
+        for i in range(max_players):
+            left_player = match1["players"][i] if i < len(match1["players"]) else ""
+            right_player = match2["players"][i] if i < len(match2["players"]) else ""
+
+            # Add inactive status
+            if left_player and left_player in inactive_players:
+                left_player += " (Inac)"
+            if right_player and right_player in inactive_players:
+                right_player += " (Inac)"
+
+            print(f"{left_player:<30} | {right_player}")
+
+    # Show available players
+    active_players = [p for p in players if p not in inactive_players]
+    all_selected = set()
+    for match in selected_matches:
+        all_selected.update(match["players"])
+
+    available_players = [p for p in active_players if p not in all_selected]
+
+    if available_players:
+        print(f"\nAVAILABLE PLAYERS")
+        print("-" * 17)
+        for player in sorted(available_players):
+            print(player)
+
+    print(f"\nSelected {len(selected_matches)} match(es) for team selection.")
+    print("Team selection functionality will be enhanced in next update.")
 
 def list_matches():
     """
