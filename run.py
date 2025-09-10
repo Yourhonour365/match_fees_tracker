@@ -253,12 +253,21 @@ def mark_attendance():
 
         break  # Exit loop if we have matches
 
-    # Display filtered matches (we'll update this format in next step)
+    # Display filtered matches in table format
     print("\n=== Matches ===")
+    print(f"{'No.':<4} {'Date':<10} {'Opponent':<15} {'Selected':<8} {'Available':<9}")
+    print("-" * 50)
+
     for i, match in enumerate(filtered_matches, 1):
-        date_fmt = match["date"].strftime("%d-%b-%Y")
-        fee_fmt = f"£{match['fee']:.2f}"
-        print(f"{i}) {club_name} vs {match['opponent']} {date_fmt} Fee {fee_fmt}")
+        date_fmt = match["date"].strftime("%d %b %y")
+        selected_count = len(match["players"])
+        active_players = [p for p in players if p not in inactive_players]
+        available_count = len([p for p in active_players if p not in match["players"]])
+
+        selected_display = "-" if selected_count == 0 else str(selected_count)
+        available_display = "-" if available_count == 0 else str(available_count)
+
+        print(f"{i:<4} {date_fmt:<10} {match['opponent']:<15} {selected_display:<8} {available_display:<9}")
 
     while True:
         choice = input("\nChoose match number: ").strip()
