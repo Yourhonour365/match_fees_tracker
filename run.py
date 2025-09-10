@@ -274,10 +274,10 @@ def club_management():
     Handle club management options
     """
     while True:
-        print(f"\n=== Club Management ===")
-        print(f"{'1) Switch club'}")
-        print(f"{'2) Delete club data'}")
-        print(f"{'b) Back to main menu'}")
+        print("\n=== Club Management ===")
+        print("{'1) Switch club'}")
+        print("{'2) Delete club data'}")
+        print("{'b) Back to main menu'}")
         print()
 
         choice = input("Choose option: ").strip().lower()
@@ -311,7 +311,7 @@ def main():
         if club_name:
             print(f"\n=== Match Fees Tracker - {club_name} ===")
         else:
-            print(f"\n=== Match Fees Tracker - [Club Name Not Set] ===")
+            print("\n=== Match Fees Tracker - [Club Name Not Set] ===")
 
         if not club_name:
             club_name = smart_title(input("\nEnter the name of your club: ").strip())
