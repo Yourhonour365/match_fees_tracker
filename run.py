@@ -341,7 +341,7 @@ def main():
         elif choice == 3:
             add_match()
         elif choice == 4:
-            list_matches_indexed()
+            print("Match fee payments not implemented yet.")
         elif choice == 5:
             list_players()
         elif choice == 6:
