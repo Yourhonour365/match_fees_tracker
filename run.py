@@ -5,6 +5,7 @@ DATA_FILE = "data.json"
 
 players = []
 matches = []
+inactive_players = []
 
 
 def smart_title(text: str) -> str:
