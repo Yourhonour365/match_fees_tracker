@@ -270,13 +270,24 @@ def mark_attendance():
         print(f"{i:<4} {date_fmt:<10} {match['opponent']:<15} {selected_display:<8} {available_display:<9}")
 
     while True:
-        choice = input("\nChoose match number: ").strip()
-        if choice.isdigit():
-            idx = int(choice)
-            if 1 <= idx <= len(filtered_matches):
-                match = filtered_matches[idx - 1]
+        choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5): ").strip()
+        if not choice:
+            continue
+
+        try:
+            # Parse comma-separated numbers
+            match_numbers = [int(x.strip()) for x in choice.split(',')]
+
+            # Validate all numbers are in range
+            valid_numbers = all(1 <= num <= len(filtered_matches) for num in match_numbers)
+
+            if valid_numbers and match_numbers:
+                selected_matches = [filtered_matches[num - 1] for num in match_numbers]
                 break
-        print(f"\nPlease enter 1–{len(filtered_matches)}.")
+            else:
+                print(f"Please enter numbers between 1 and {len(filtered_matches)}, separated by commas")
+        except ValueError:
+            print("Please enter valid numbers separated by commas (e.g. 1,3,5)")
 
     available_players = [player for player in players if player not in match["players"]]
 
