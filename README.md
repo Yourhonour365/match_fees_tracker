@@ -146,6 +146,43 @@ m) Club management      e) Exit
 - **Matches**: Complete match records with teams and payments
 - **Data Persistence**: JSON file storage with automatic backup
 
+Testing
+Manual Testing Procedures
+The application has been thoroughly tested using manual testing procedures to ensure all functionality works as intended.
+Test Environment
+
+Local Environment: Python 3.8+ on Ubuntu/Windows
+Deployment Environment: Heroku cloud platform
+Data Storage: JSON file persistence
+
+Core Functionality Tests
+Test CaseDescriptionExpected ResultActual ResultStatusPlayer ManagementTC01Add new player with valid namePlayer added to roster, confirmation shownPlayer added successfully✅ PassTC02Add player with duplicate nameError message with suggestions for differentiationError displayed with helpful suggestions✅ PassTC03Add player with numbers in nameValidation error, name rejectedError: "Player name cannot contain numbers"✅ PassTC04Edit existing player nameName updated across all matches and recordsAll records updated correctly✅ PassTC05Make player inactive/activeStatus updated, affects team selection availabilityStatus changed, excluded from team selection✅ PassFixture ManagementTC06Add fixture with valid date (DD/MM/YY)Fixture created with correct date parsingDate parsed correctly, fixture saved✅ PassTC07Add fixture with invalid date formatValidation error with format guidanceError with clear format instructions✅ PassTC08Add duplicate fixtureWarning shown, option to proceedWarning displayed, user choice respected✅ PassTC09Edit fixture detailsSelected fixture updated correctlyAll changes saved and displayed✅ PassTC10Delete fixture with playersWarning about selected players shownWarning displayed, confirmation required✅ PassTeam SelectionTC11Select single player for matchPlayer added to match rosterPlayer appears in team list✅ PassTC12Bulk select players (1,3,5)Multiple players added efficientlyAll specified players added✅ PassTC13Select player range (1-5)Range of players added to matchesCorrect range processed and added✅ PassTC14Select "all" available playersAll eligible players added to matchesAll available players selected✅ PassTC15Remove players from matchesPlayers removed from team rosterPlayers successfully removed✅ PassFinancial ManagementTC16Record valid payment amountPayment recorded for correct number of matchesPayment allocated to oldest matches first✅ PassTC17Attempt partial paymentValidation error, full matches onlyError: "Only full match payments accepted"✅ PassTC18Payment exceeding amount dueValidation error preventing overpaymentError: "Cannot exceed total due"✅ PassTC19Generate financial reportAccurate calculations and displayTotals, percentages calculated correctly✅ PassTC20View player balancesOutstanding amounts displayed correctlyAll balances accurate and up-to-date✅ Pass
+Data Validation Tests
+Input TypeInvalid InputExpected BehaviorResultPlayer Name"John123"Reject with error message✅ Error displayedPlayer Name"" (empty)Require non-empty name✅ Validation enforcedDate"32/13/25"Invalid date error✅ Error with format helpDate"abc"Format validation error✅ Clear error messageFee Amount"abc"Numeric validation error✅ "Please enter a number"Fee Amount"-5"Positive number required✅ Validation enforcedMatch Selection"99"Range validation✅ "Please enter 1-X"Payment Amount"0"Positive amount required✅ "Amount must be > £0"
+User Interface Tests
+FeatureTestExpected ResultStatusMenu NavigationPress 'b' from any submenuReturn to previous menu✅ PassMenu NavigationEnter invalid menu optionClear error message✅ PassTable DisplayView player listTwo-column format, status indicators✅ PassTable DisplayView team sheetsSide-by-side match comparison✅ PassInput HandlingEnter empty input where requiredAppropriate validation message✅ PassInput HandlingUse 'all' keywordProcess all available items✅ Pass
+Edge Cases and Error Handling
+ScenarioExpected BehaviorResultEmpty player rosterGraceful handling with helpful message✅ "No players registered yet"No matches scheduledClear messaging and guidance✅ "No matches scheduled yet"All players inactiveTeam selection shows no available players✅ Handled correctlyLarge player namesText truncation in tables✅ Names truncated to fit displayFuture/past date filteringCorrect date range calculations✅ Filters work accurately
+Code Quality Testing
+PEP8 Compliance
+
+Tool Used: flake8 and black formatter
+Status: Code formatted to PEP8 standards
+Remaining Issues: None significant
+Line Length: Maintained under 88 characters (black default)
+
+Performance Testing
+
+Large Dataset: Tested with 50+ players, 20+ matches
+Response Time: All operations complete within acceptable time
+Memory Usage: Efficient data structures, no memory leaks observed
+
+Known Issues
+IssueSeverityStatusWorkaroundVery long opponent namesMinorOpenNames truncated in displaysTimezone handlingLowDocumentedUses local system time
+Testing Conclusion
+All critical functionality has been tested and verified to work correctly. The application handles user input validation effectively, provides clear error messages, and maintains data integrity throughout all operations. Edge cases are handled gracefully with appropriate user feedback.
+The testing process revealed no critical bugs, and all identified minor issues have been documented with appropriate workarounds where necessary.
+
 ## Roadmap
 
 ### Phase 1: Core Python Logic ✅
