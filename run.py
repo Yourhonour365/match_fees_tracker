@@ -2370,8 +2370,9 @@ def match_fees_menu():
     while True:
         print("\n=== Match Fees ===")
         print("1) Check match teams")
-        print("2) Record fee payment")
-        print("3) Player fee balances")
+        print("2) Fees due per match")
+        print("3) Record fee payment")
+        print("4) Player fee balances")
         print("b) Back to main menu")
         print()
 
@@ -2382,73 +2383,262 @@ def match_fees_menu():
         elif choice == '1':
             show_team_sheets()  # Shows team composition for matches
         elif choice == '2':
-            record_payment()
+            # Fees due per match
+            if not matches:
+                print("\nNo matches recorded yet.")
+                input("\nPress Enter to continue...")
+                continue
+
+            # Get matches sorted by date
+            sorted_matches = get_matches_sorted()
+
+            # Filter options
+            while True:
+                print("\n=== Fees Due Per Match ===")
+                print("Show matches:")
+                print("1) Upcoming matches only")
+                print("2) Recent + upcoming (last 2 weeks + next 2 weeks)")
+                print("3) All matches with outstanding fees")
+                print("4) All matches")
+                print("b) Back to match fees menu")
+                print()
+
+                filter_choice = input("Choose filter: ").strip().lower()
+                if filter_choice == 'b':
+                    break
+                if filter_choice not in ['1', '2', '3', '4']:
+                    print("Please enter 1, 2, 3, 4, or b")
+                    continue
+
+                # Apply filters
+                from datetime import timedelta
+                today = datetime.now().date()
+
+                if filter_choice == '1':
+                    filtered_matches = [m for m in sorted_matches if m["date"] >= today]
+                elif filter_choice == '2':
+                    start_date = today - timedelta(days=14)
+                    end_date = today + timedelta(days=14)
+                    filtered_matches = [m for m in sorted_matches if start_date <= m["date"] <= end_date]
+                elif filter_choice == '3':
+                    # Only matches with outstanding fees
+                    filtered_matches = []
+                    for match in sorted_matches:
+                        if match["players"]:
+                            paid_count = len(match.get("paid", []))
+                            total_players = len(match["players"])
+                            if paid_count < total_players:
+                                filtered_matches.append(match)
+                else:  # choice == '4'
+                    filtered_matches = sorted_matches
+
+                if not filtered_matches:
+                    print("\nNo matches found for the selected criteria.")
+                    input("\nPress Enter to continue...")
+                    continue
+
+                # Display fees due per match in two columns (team sheets style)
+                print(f"\n=== Fees Due Per Match ({len(filtered_matches)} matches) ===")
+                print()
+
+                total_outstanding = 0
+                matches_with_fees_due = 0
+
+                # Process matches in pairs for two-column display
+                for i in range(0, len(filtered_matches), 2):
+                    # Left column match
+                    left_match = filtered_matches[i]
+                    left_date = left_match["date"].strftime("%d %b %y").upper()
+                    left_num = i + 1
+                    left_header = f"{left_num}. {left_date} VS {left_match['opponent'].upper()}"
+
+                    # Right column match (if exists)
+                    right_match = filtered_matches[i+1] if i+1 < len(filtered_matches) else None
+                    if right_match:
+                        right_date = right_match["date"].strftime("%d %b %y").upper()
+                        right_num = i + 2
+                        right_header = f"{right_num}. {right_date} VS {right_match['opponent'].upper()}"
+
+                    # Calculate fees for left match
+                    if not left_match["players"]:
+                        left_unpaid = []
+                        left_fees_due = 0
+                    else:
+                        left_paid_players = set(left_match.get("paid", []))
+                        left_unpaid = [p for p in left_match["players"] if p not in left_paid_players]
+                        left_fees_due = len(left_unpaid) * left_match["fee"]
+                        total_outstanding += left_fees_due
+                        if left_fees_due > 0:
+                            matches_with_fees_due += 1
+
+                    # Calculate fees for right match
+                    if right_match:
+                        if not right_match["players"]:
+                            right_unpaid = []
+                            right_fees_due = 0
+                        else:
+                            right_paid_players = set(right_match.get("paid", []))
+                            right_unpaid = [p for p in right_match["players"] if p not in right_paid_players]
+                            right_fees_due = len(right_unpaid) * right_match["fee"]
+                            total_outstanding += right_fees_due
+                            if right_fees_due > 0:
+                                matches_with_fees_due += 1
+
+                    # Display headers
+                    if right_match:
+                        print(f"{left_header:<40} | {right_header}")
+                        print("-" * 40 + " " + "-" * 40)
+                    else:
+                        print(left_header)
+                        print("-" * 40)
+
+                    # Display players who owe fees side by side
+                    max_unpaid = max(len(left_unpaid), len(right_unpaid) if right_match else 0)
+
+                    for j in range(max_unpaid):
+                        if j < len(left_unpaid):
+                            left_player = f"  {j+1:2}. {left_unpaid[j]:<20} £{left_match['fee']:.2f}"
+                        else:
+                            left_player = ""
+
+                        if right_match and j < len(right_unpaid):
+                            right_player = f"  {j+1:2}. {right_unpaid[j]:<20} £{right_match['fee']:.2f}"
+                        else:
+                            right_player = ""
+
+                        if right_match:
+                            print(f"{left_player:<35} | {right_player}")
+                        else:
+                            print(left_player)
+
+                    # Show "All fees paid" if team selected but no fees due
+                    if left_match["players"] and not left_unpaid:
+                        left_status = "  ✓ All fees paid"
+                    else:
+                        left_status = ""
+
+                    if right_match and right_match["players"] and not right_unpaid:
+                        right_status = "  ✓ All fees paid"
+                    else:
+                        right_status = ""
+
+                    if left_status or right_status:
+                        if right_match:
+                            print(f"{left_status:<35} | {right_status}")
+                        else:
+                            print(left_status)
+
+                    print()  # Space between match pairs
+
+                # Summary
+                print("-" * 40)
+                print(f"SUMMARY:")
+                print(f"• Total outstanding fees: £{total_outstanding:.2f}")
+                print(f"• Matches with fees due: {matches_with_fees_due}")
+                print(f"• Matches fully paid: {len(filtered_matches) - matches_with_fees_due}")
+
+                # Add menu options
+                print(f"\nOptions:")
+                print(f"1) Record fee payment")
+                print(f"2) Player fee balances")
+                print(f"b) Back to main menu")
+
+                option_choice = input("\nChoose option: ").strip().lower()
+
+                if option_choice == '1':
+                    record_payment()
+                elif option_choice == '2':
+                    # Jump to player fee balances (option 4 from main menu)
+                    break  # This will exit the filter loop and go to option 4 handling
+                elif option_choice == 'b':
+                    return  # Go back to main menu
+                else:
+                    input("\nPress Enter to continue...")
+                break
         elif choice == '3':
-            # Go directly to player fee balances (option 1 from view_fee_balances)
+            record_payment()
+        elif choice == '4':
+            # Go directly to player fee balances with payment option
             if not players:
                 print("\nNo players registered yet.")
                 input("\nPress Enter to continue...")
                 continue
 
-            print("\n=== Player Fee Balances ===")
+            while True:
+                print("\n=== Player Fee Balances ===")
 
-            # Calculate balances for all players
-            player_balances = []
-            total_outstanding = 0
+                # Calculate balances for all players
+                player_balances = []
+                total_outstanding = 0
 
-            for player in sorted(players):
-                total_owed = 0
-                total_paid = 0
+                for player in sorted(players):
+                    total_owed = 0
+                    total_paid = 0
 
-                for match in matches:
-                    if player in match.get("players", []):
-                        total_owed += match["fee"]
-                        if player in match.get("paid", []):
-                            total_paid += match["fee"]
+                    for match in matches:
+                        if player in match.get("players", []):
+                            total_owed += match["fee"]
+                            if player in match.get("paid", []):
+                                total_paid += match["fee"]
 
-                balance_due = total_owed - total_paid
-                total_outstanding += balance_due
+                    balance_due = total_owed - total_paid
+                    total_outstanding += balance_due
 
-                # Only include players who owe money
-                if balance_due > 0:
-                    player_balances.append((player, balance_due))
+                    # Only include players who owe money
+                    if balance_due > 0:
+                        player_balances.append((player, balance_due))
 
-            if not player_balances:
-                print("\nNo outstanding fees - all players are up to date!")
-                input("\nPress Enter to continue...")
-                continue
+                if not player_balances:
+                    print("\nNo outstanding fees - all players are up to date!")
+                    input("\nPress Enter to continue...")
+                    break
 
-            # Display in two columns
-            total_players = len(player_balances)
-            half = (total_players + 1) // 2
+                # Display in two columns
+                total_players = len(player_balances)
+                half = (total_players + 1) // 2
 
-            print("-" * 70)
-            left_header = f"{'Player':<20} {'Due':<8}"
-            right_header = f"{'Player':<20} {'Due':<8}"
-            print(f"{left_header}  {right_header}")
-            print("-" * 70)
+                print("-" * 70)
+                left_header = f"{'Player':<20} {'Due':<8}"
+                right_header = f"{'Player':<20} {'Due':<8}"
+                print(f"{left_header}  {right_header}")
+                print("-" * 70)
 
-            for i in range(half):
-                # Left column
-                left_player, left_amount = player_balances[i]
-                left_player_display = left_player[:19]  # Truncate if too long
-                left_line = f"{left_player_display:<20} £{left_amount:.2f}  "
+                for i in range(half):
+                    # Left column
+                    left_player, left_amount = player_balances[i]
+                    left_player_display = left_player[:19]  # Truncate if too long
+                    left_line = f"{left_player_display:<20} £{left_amount:.2f}  "
 
-                # Right column (if exists)
-                right_idx = i + half
-                if right_idx < total_players:
-                    right_player, right_amount = player_balances[right_idx]
-                    right_player_display = right_player[:19]
-                    right_line = f"{right_player_display:<20} £{right_amount:.2f}"
-                    print(f"{left_line} {right_line}")
+                    # Right column (if exists)
+                    right_idx = i + half
+                    if right_idx < total_players:
+                        right_player, right_amount = player_balances[right_idx]
+                        right_player_display = right_player[:19]
+                        right_line = f"{right_player_display:<20} £{right_amount:.2f}"
+                        print(f"{left_line} {right_line}")
+                    else:
+                        print(left_line)
+
+                print("-" * 70)
+                print(f"TOTAL OUTSTANDING: £{total_outstanding:.2f}")
+                print(f"Players with fees due: {len(player_balances)}")
+
+                # Add payment option
+                print("\nOptions:")
+                print("1) Record payment for player")
+                print("b) Back to match fees menu")
+
+                balance_choice = input("\nChoose option: ").strip().lower()
+
+                if balance_choice == 'b':
+                    break
+                elif balance_choice == '1':
+                    record_payment()
+                    # After payment, refresh the display to show updated balances
+                    continue
                 else:
-                    print(left_line)
-
-            print("-" * 70)
-            print(f"TOTAL OUTSTANDING: £{total_outstanding:.2f}")
-            print(f"Players with fees due: {len(player_balances)}")
-
-            input("\nPress Enter to continue...")
+                    print("Please choose a valid option.")
+                    input("Press Enter to continue...")
         else:
             print("Please choose a valid option.")
 
