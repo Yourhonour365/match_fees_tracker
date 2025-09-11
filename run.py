@@ -799,26 +799,23 @@ def record_payment():
     print(f"\n✓ Payment recorded: {player_who_paid} paid £{selected_match['fee']:.2f}")
 
 def view_fee_balances():
-    """Show fee balances for all players"""
+    """Show fee balances for all players in two columns"""
     if not players:
         print("\nNo players registered yet.")
         return
 
     print("\n=== Match Fee Balances ===")
-    print("-" * 60)
-    print(f"{'Player':<25} {'Matches':<10} {'Paid':<10} {'Due':<10}")
-    print("-" * 60)
 
+    # Calculate balances for all players
+    player_balances = []
     total_outstanding = 0
 
-    for player in sorted(players):  # Added sorted() here
+    for player in sorted(players):
         total_owed = 0
         total_paid = 0
-        matches_played = 0
 
         for match in matches:
             if player in match.get("players", []):
-                matches_played += 1
                 total_owed += match["fee"]
                 if player in match.get("paid", []):
                     total_paid += match["fee"]
@@ -826,18 +823,46 @@ def view_fee_balances():
         balance_due = total_owed - total_paid
         total_outstanding += balance_due
 
-        # Format the amounts - keeping consistent width
-        paid_str = f"£{total_paid:.2f}" if total_paid > 0 else "-"
-        due_str = f"£{balance_due:.2f}" if balance_due > 0 else "-"
-        matches_str = str(matches_played) if matches_played > 0 else "-"
+        # Only include players who owe money
+        if balance_due > 0:
+            player_balances.append((player, balance_due))
 
-        print(f"{player:<25} {matches_str:<10} {paid_str:<10} {due_str:<10}")
+    if not player_balances:
+        print("\nNo outstanding fees - all players are up to date!")
+        input("\nPress Enter to continue...")
+        return
 
-    print("-" * 60)
-    if total_outstanding > 0:
-        print(f"{'TOTAL':<25} {'':<10} {'':<10} £{total_outstanding:.2f}")
-    else:
-        print(f"{'TOTAL':<25} {'':<10} {'':<10} -")
+    # Display in two columns
+    total_players = len(player_balances)
+    half = (total_players + 1) // 2
+
+    print("-" * 64)
+    left_header = f"{'Player':<20} {'Due':<8}"
+    right_header = f"{'Player':<20} {'Due':<8}"
+    print(f"{left_header}  {right_header}")
+    print("-" * 64)
+
+    for i in range(half):
+        # Left column
+        left_player, left_amount = player_balances[i]
+        left_player_display = left_player[:19]  # Truncate if too long
+        left_line = f"{left_player_display:<20} £{left_amount:.2f}  "
+
+        # Right column (if exists)
+        right_idx = i + half
+        if right_idx < total_players:
+            right_player, right_amount = player_balances[right_idx]
+            right_player_display = right_player[:19]
+            right_line = f"{right_player_display:<20} £{right_amount:.2f}"
+            print(f"{left_line} {right_line}")
+        else:
+            print(left_line)
+
+    print("-" * 70)
+    print(f"TOTAL OUTSTANDING: £{total_outstanding:.2f}")
+    print(f"Players with fees due: {len(player_balances)}")
+
+    input("\nPress Enter to continue...")
 
 def make_player_inactive():
     """Make a player inactive"""
