@@ -745,8 +745,7 @@ def add_players_to_matches(selected_matches):
             for local_i, local_match in enumerate(selected_matches, 1):
                 if local_player not in local_match["players"]:
                     local_available_match_nums.append(str(local_i))
-                    local_opponent = local_match["opponent"].split()[0][:8]
-                    local_availability_display.append(local_opponent)
+                    local_availability_display.append("-Avail-")
                 else:
                     local_availability_display.append("-")
 
@@ -782,8 +781,7 @@ def add_players_to_matches(selected_matches):
             local_base_width = 25
 
             for local_i, local_match in enumerate(selected_matches, 1):
-                local_opponent = local_match["opponent"].split()[0][:8]
-                local_header += f" {local_opponent:<9}"
+                local_header += f" {'Available':<9}"
                 local_base_width += 10
 
             local_separator = "-" * local_base_width
@@ -979,8 +977,7 @@ def remove_players_from_matches(selected_matches):
             for local_i, local_match in enumerate(selected_matches, 1):
                 if local_player in local_match["players"]:
                     local_current_match_nums.append(str(local_i))
-                    local_opponent = local_match["opponent"].split()[0][:8]
-                    local_player_match_display.append(local_opponent)
+                    local_player_match_display.append("-Avail-")
                 else:
                     local_player_match_display.append("-")
 
@@ -1012,8 +1009,7 @@ def remove_players_from_matches(selected_matches):
             local_base_width = 25
 
             for local_i, local_match in enumerate(selected_matches, 1):
-                local_opponent = local_match["opponent"].split()[0][:8]
-                local_header += f" {local_opponent:<9}"
+                local_header += f" {'Available':<9}"
                 local_base_width += 10
 
             local_separator = "-" * local_base_width
