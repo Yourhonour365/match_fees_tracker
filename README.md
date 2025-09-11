@@ -4,19 +4,156 @@ A Python tool to help amateur sports clubs easily collect and manage match fees.
 
 ## Features
 
-- **Simple fee tracking**: Keep track of who played and who has paid for each match
-- **Terminal-based interface**: Easy to use command-line tool for quick fee management
-- **Match data persistence**: Store match information and payment status
-- **Player management**: Track regular players and their payment history
+### Player Management
+- **Add new players** with validation and duplicate detection
+- **Edit player names** with automatic updates across all records
+- **Manage active/inactive status** to handle temporary unavailability
+- **Two-column display** with status indicators for easy viewing
+
+### Fixture Management
+- **Create, edit, and delete** match fixtures
+- **Date validation** with flexible input formats (DD/MM/YY or DD/MM/YYYY)
+- **Fee tracking** per match with customisable amounts
+- **Duplicate detection** and warnings for scheduling conflicts
+
+### Team Selection
+- **Multi-match team selection** (up to 4 matches simultaneously)
+- **Player availability tracking** across multiple fixtures
+- **Bulk operations** with range support (e.g., 1-5, all, 1,3,5)
+- **Visual team composition** display with available players
+
+### Financial Management
+- **Match fee tracking** and payment recording
+- **Player fee balance** reports with outstanding amounts
+- **Financial reports** with customisable date filtering
+- **Payment validation** (full matches only to avoid confusion)
+- **Collection rate** statistics and summaries
+
+### Reporting
+- **Player lists** with comprehensive status information
+- **Team sheets** in organised two-column format
+- **Fixture lists** with multiple filtering options
+- **Financial summaries** showing outstanding fees and collection rates
+
+## Installation
+
+### Requirements
+- Python 3.7 or higher
+- No external dependencies required (uses only Python standard library)
+
+### Local Development
+```bash
+# Clone the repository
+git clone <repository-url>
+cd match_fees_tracker
+
+# Create virtual environment (recommended)
+python -m venv .venv
+
+# Activate virtual environment
+# On Windows:
+.venv\Scripts\activate
+# On macOS/Linux:
+source .venv/bin/activate
+
+# Run the application
+python run.py
+```
+
+### Heroku Deployment
+This application is deployed and running live on Heroku:
+
+**Live Application:** [https://match-fees-tracker-2d395a16f578.herokuapp.com/](https://match-fees-tracker-2d395a16f578.herokuapp.com/)
+
+To deploy your own version:
+
+```bash
+# Login to Heroku
+heroku login
+
+# Create Heroku app
+heroku create your-app-name
+
+# Deploy to Heroku
+git push heroku main
+
+# View your deployed app
+heroku open
+```
+
+## Usage
+
+### First Time Setup
+1. Run `python run.py` or visit the live Heroku URL
+2. The application loads with "Demo Rugby Club" and sample data
+3. To set up your own club:
+   - Select **m) Club management** from main menu
+   - Choose **1) Delete club data**
+   - Type `yes` to confirm deletion
+   - Enter your club name when prompted
+   - Add your own players and fixtures
+
+### Main Menu Navigation
+```
+MANAGE:
+1) Players              3) Fixtures
+2) Team selection       4) Match fees
+
+REPORTS:
+5) Player list          7) Fixture list
+6) Team sheets          8) Match fee balances
+
+m) Club management      e) Exit
+```
+
+### Player Management
+- **Add players**: Enter names one at a time with automatic formatting
+- **Edit names**: Update player names with system-wide updates
+- **Status management**: Mark players as active/inactive
+- **Smart formatting**: Handles club acronyms (RFC, FC, CC) correctly
+
+### Team Selection Workflow
+1. **Select matches** (up to 4 for efficient management)
+2. **View availability** in dynamic tables showing player/match combinations
+3. **Bulk operations** using flexible input:
+   - Single: `1`
+   - Multiple: `1,3,5`
+   - Range: `1-5`
+   - All: `all`
+
+### Fee Management
+- **Payment recording** with validation for full matches only
+- **Outstanding balances** displayed in organised tables
+- **Financial reports** with date filtering options
+- **Collection tracking** with percentage rates
+
+## Data Structure
+
+### Match Object
+```python
+{
+    "opponent": "Dublin RFC",
+    "date": date(2025, 9, 15),
+    "fee": 10.0,
+    "players": ["Player 1", "Player 2"],
+    "paid": ["Player 1"]
+}
+```
+
+### Application State
+- **Players**: List of all registered players
+- **Inactive Players**: Separate tracking for unavailable players
+- **Matches**: Complete match records with teams and payments
+- **Data Persistence**: JSON file storage with automatic backup
 
 ## Roadmap
 
 ### Phase 1: Core Python Logic ✅
-
-- 🗸 Basic match and player data structures
-- 🗸 Terminal-based fee tracking
-- 🗸 Data persistence (JSON/CSV export)
-- 🗸 Payment reporting and summaries
+- ✓ Basic match and player data structures
+- ✓ Terminal-based fee tracking
+- ✓ Data persistence (JSON storage)
+- ✓ Payment reporting and summaries
+- ✓ Team selection and management
 
 ### Phase 2: Payment Integration
 - [ ] Generate secure payment links for easy sharing
@@ -39,94 +176,6 @@ This tool is especially relevant for grassroots sports where players typically p
 - **Football**: Referee fees, pitch hire, equipment
 - **Rugby**: Ground maintenance, match officials, kit
 
-## Installation
-
-### Local Development
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd match_fees_tracker
-
-# Create virtual environment
-python -m venv .venv
-
-# Activate virtual environment
-# On Windows:
-.venv\Scripts\activate
-# On macOS/Linux:
-source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### Heroku Deployment
-
-This application is configured for deployment on Heroku for a Code Institute Python project.
-
-```bash
-# Login to Heroku
-heroku login
-
-# Create Heroku app
-heroku create your-app-name
-
-# Deploy to Heroku
-git push heroku main
-
-# View your deployed app
-heroku open
-```
-
-**Required Heroku files:**
-- `requirements.txt` - Python dependencies
-- `Procfile` - Tells Heroku how to run the app
-- `runtime.txt` - Specifies Python version (optional)
-
-## Usage
-
-### Local Usage
-```bash
-python main.py
-```
-
-### Deployed Version
-Visit your Heroku app URL to use the web interface (coming in Phase 2).
-
-## Match Data Structure
-
-Each match is stored as a Python dictionary to keep all details about a match in one place:
-
-```python
-match = {
-    "id": "unique_match_id",
-    "opponent": "ewhurst",
-    "date": "2025-09-25",  # ISO format for better sorting
-    "venue": "home",       # "home" or "away"
-    "fee": 5.0,
-    "players": [],         # list of player names/IDs playing in the match
-    "paid": [],           # list of player names/IDs who have paid match fees
-    "created_at": "2025-09-11T10:30:00",
-    "notes": ""           # optional notes about the match
-}
-```
-
-## Player Data Structure
-
-```python
-player = {
-    "id": "unique_player_id",
-    "name": "John Smith",
-    "email": "john@example.com",  # for payment links and reminders
-    "phone": "+44123456789",      # optional
-    "matches_played": 0,
-    "total_fees_owed": 0.0,
-    "total_fees_paid": 0.0,
-    "payment_history": []         # list of payment records
-}
-```
-
 ## Contributing
 
 1. Fork the repository
@@ -146,10 +195,10 @@ If you encounter any issues or have suggestions for improvements, please open an
 ## Acknowledgments
 
 This project was developed with assistance from:
-- **Claude AI** (Anthropic) - Code guidance and project structure
-- **ChatGPT** (OpenAI) - Programming assistance
-- **Python for Dummies** - Learning resource
-- **Python Crash Course** - Educational reference
+- **Claude AI** (Anthropic) - Code refactoring, structure guidance, and problem-solving assistance
+- **ChatGPT** (OpenAI) - Programming support and debugging help
+- **Python for Dummies** by Stef Maruch and Aahz Maruch - Learning resource for Python fundamentals
+- **Python Crash Course** by Eric Matthes - Educational reference for Python programming concepts
 - **Code Institute** - Learning framework and project requirements
 
 ---
