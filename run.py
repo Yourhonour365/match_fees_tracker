@@ -641,10 +641,10 @@ def mark_attendance():
             print("Please enter 1, 2, or b")
             input("Press Enter to continue...")
 
-def team_sheets_add_players(selected_matches):
-    """Handle adding players in team sheets context"""
+def add_players_to_matches(selected_matches):
+    """Handle adding players to matches in main team selection context"""
     while True:
-        # Find players available for matches using safe variable names
+        # Find players available for matches
         local_active_players = [p for p in players if p not in inactive_players]
         local_player_availability = []
 
@@ -663,57 +663,53 @@ def team_sheets_add_players(selected_matches):
             if local_available_match_nums:
                 local_player_availability.append((local_player, local_availability_display, local_available_match_nums))
 
-        # Sort players by availability
+        # Sort players by number of available matches (descending)
         local_player_availability.sort(key=lambda x: len(x[2]), reverse=True)
 
-        if not local_player_availability:
-            print("\nNo players available for any matches.")
-            input("Press Enter to continue...")
-            break
+        print("\n=== Add Players to Matches ===")
 
-        print("\n=== Add Players ===")
-
-        # Create dynamic header
-        local_header = f"{'No.':<3} {'Player':<20}"
-        local_base_width = 25
-
+        # Show simple match reference list
+        print("Selected matches:")
         for local_i, local_match in enumerate(selected_matches, 1):
-            local_opponent = local_match["opponent"].split()[0][:8]
-            local_header += f" {local_opponent:<9}"
-            local_base_width += 10
+            local_date_fmt = local_match["date"].strftime("%d %b %y")
+            local_team_count = len(local_match["players"])
+            print(f"{local_i}. {local_date_fmt} vs {local_match['opponent']} ({local_team_count} players)")
 
-        local_separator = "-" * local_base_width
-        print(local_separator)
-        print(local_header)
-        print(local_separator)
+        # Show players with their available matches
+        print(f"\nPlayer availability:")
 
-        for local_i, (local_player, local_availability, local_match_nums) in enumerate(local_player_availability, 1):
-            local_line = f"{local_i:<3} {local_player:<20}"
-            for local_avail in local_availability:
-                local_display_avail = local_avail if local_avail != "-" else "-"
-                if local_display_avail != "-":
-                    local_display_avail = local_display_avail[:8]
-                local_line += f" {local_display_avail:<9}"
-            print(local_line)
+        if local_player_availability:
+            # Create dynamic header
+            local_header = f"{'No.':<3} {'Player':<20}"
+            local_base_width = 25
 
-        print(local_separator)
+            for local_i, local_match in enumerate(selected_matches, 1):
+                local_opponent = local_match["opponent"].split()[0][:8]
+                local_header += f" {local_opponent:<9}"
+                local_base_width += 10
 
-        # Add menu options display
-        print("\nOptions:")
-        print("1) Add player(s) to matches")
-        print("b) Back to team management")
+            local_separator = "-" * local_base_width
+            print(local_separator)
+            print(local_header)
+            print(local_separator)
 
-        # Get menu choice first
-        local_add_choice = input("\nChoose option: ").strip().lower()
+            for local_i, (local_player, local_availability, local_match_nums) in enumerate(local_player_availability, 1):
+                local_line = f"{local_i:<3} {local_player:<20}"
+                for local_avail in local_availability:
+                    local_display_avail = local_avail if local_avail != "-" else "-"
+                    if local_display_avail != "-":
+                        local_display_avail = local_display_avail[:8]
+                    local_line += f" {local_display_avail:<9}"
+                print(local_line)
 
-        if local_add_choice == 'b':
-            break
-        elif local_add_choice == '1':
-            # Now get player selection
+            print(local_separator)
+            print(f"Total available players: {len(local_player_availability)}")
+
+            # FIXED: Go directly to player selection instead of showing menu
             local_players_input = input(f"\nChoose player(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back: ").strip()
 
             if local_players_input.lower() == 'b':
-                continue  # Go back to menu
+                break
 
             try:
                 if local_players_input.lower() == 'all':
@@ -745,7 +741,7 @@ def team_sheets_add_players(selected_matches):
                         print(f"{local_i}. {local_date_fmt} vs {local_match['opponent']} ({local_team_count} players)")
 
                     # Select matches
-                    local_matches_input = input(f"\nAdd to which matches? (e.g. 1 or 1,3,4 or 'all'): ").strip().lower()
+                    local_matches_input = input(f"\nAdd selected players to which matches? (e.g. 1 or 1,3,4 or 'all'): ").strip().lower()
 
                     if local_matches_input == 'all':
                         local_target_match_indices = list(range(len(selected_matches)))
@@ -763,7 +759,7 @@ def team_sheets_add_players(selected_matches):
                             input("Press Enter to continue...")
                             continue
 
-                    # Add players
+                    # Add players to selected matches
                     local_added_count = 0
                     for local_player, local_availability, local_available_match_nums in local_selected_players_info:
                         local_available_indices = [int(x) - 1 for x in local_available_match_nums]
@@ -775,26 +771,42 @@ def team_sheets_add_players(selected_matches):
 
                     save_data()
 
+                    # Show confirmation
                     if local_added_count > 0:
-                        print(f"\n✓ Players added successfully!")
-                    else:
-                        print(f"\nNo players were added (they may already be selected for those matches)")
+                        print(f"\n✓ Added players successfully!")
 
-                    input("Press Enter to continue...")
-                    # Continue loop to refresh available players and show menu again
-                    continue
+                        for local_match_idx in local_target_match_indices:
+                            local_match = selected_matches[local_match_idx]
+                            local_date_fmt = local_match["date"].strftime("%d %b %y")
+                            local_added_to_this_match = []
+
+                            for local_player, local_availability, local_available_match_nums in local_selected_players_info:
+                                local_available_indices = [int(x) - 1 for x in local_available_match_nums]
+                                if local_match_idx in local_available_indices:
+                                    local_added_to_this_match.append(local_player)
+
+                            if local_added_to_this_match:
+                                print(f"\n{local_date_fmt} vs {local_match['opponent']}:")
+                                for local_player in local_added_to_this_match:
+                                    print(f"  • {local_player}")
+                    else:
+                        print("\nNo players were added (they may already be selected for those matches)")
+
+                    input("\nPress Enter to continue...")
+                    # Continue the loop to refresh the available players list
                 else:
                     print(f"Please enter numbers between 1 and {len(local_player_availability)}")
                     input("Press Enter to continue...")
             except ValueError:
-                print("Please enter valid numbers")
+                print("Please enter valid numbers separated by commas")
                 input("Press Enter to continue...")
         else:
-            print("Please choose a valid option.")
+            print("\nNo players available for any matches.")
             input("Press Enter to continue...")
+            break
 
 def remove_players_from_matches(selected_matches):
-    """Handle removing players from matches"""
+    """Handle removing players from matches in main team selection context"""
     while True:
         # Find players currently in matches
         local_player_removal_options = []
@@ -859,24 +871,11 @@ def remove_players_from_matches(selected_matches):
             print(local_separator)
             print(f"Total players in matches: {len(local_player_removal_options)}")
 
-            print("\nOptions:")
-            print("1) Remove player(s) from matches")
-            print("b) Back to team selection")
-        else:
-            print("\nNo players currently selected for any matches.")
-            print("\nOptions:")
-            print("b) Back to team selection")
-
-        local_remove_choice = input("\nChoose option: ").strip().lower()
-
-        if local_remove_choice == 'b':
-            break
-        elif local_remove_choice == '1' and local_player_removal_options:
-            # Select multiple players to remove
+            # FIXED: Go directly to player selection instead of showing menu
             local_players_input = input(f"\nChoose player(s) to remove (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back: ").strip()
 
             if local_players_input.lower() == 'b':
-                continue
+                break
 
             try:
                 if local_players_input.lower() == 'all':
@@ -968,8 +967,9 @@ def remove_players_from_matches(selected_matches):
                 print("Please enter valid numbers separated by commas")
                 input("Press Enter to continue...")
         else:
-            print("Please choose a valid option.")
+            print("\nNo players currently selected for any matches.")
             input("Press Enter to continue...")
+            break
 
 def list_matches():
     """
