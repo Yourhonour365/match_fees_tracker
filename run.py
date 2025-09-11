@@ -3099,7 +3099,11 @@ def make_player_inactive():
 
 
 def make_player_active():
-    """Make an inactive player active again"""
+    """
+    Make an inactive player active again.
+
+    Note: The persistent data file is updated only after all changes are made, not after each individual change.
+    """
     if not players:
         print("\nNo players registered.")
         return
@@ -3142,26 +3146,39 @@ def make_player_active():
 
     while inactive_players:
         choice = input(
-            "\nEnter player number to make active (or Enter to finish): "
+            "\nEnter player number(s) to make active (e.g. 1 or 1,3,5 or 1-4 or 'all', Enter to finish): "
         ).strip()
         if not choice:
             break
 
-        if choice.isdigit() and 1 <= int(choice) <= len(inactive_players):
-            selected_player = inactive_players[int(choice) - 1]
-
-            # Make the player active
-            inactive_players.remove(selected_player)
-            made_active_count += 1
-            print(f"\n✓ {selected_player.upper()} has been made active")
-
-            if inactive_players:
-                print(f"\nRemaining inactive players: {len(inactive_players)}")
+        try:
+            if choice.lower() == "all":
+                player_numbers = list(range(1, len(inactive_players) + 1))
+            elif "-" in choice and "," not in choice:
+                start, end = map(int, choice.split("-"))
+                if 1 <= start <= end <= len(inactive_players):
+                    player_numbers = list(range(start, end + 1))
+                else:
+                    print(f"Range must be between 1 and {len(inactive_players)}")
+                    continue
             else:
-                print("\nAll players are now active.")
-                break
-        else:
-            print(f"Please enter 1-{len(inactive_players)}")
+                player_numbers = [int(x.strip()) for x in choice.split(",")]
+
+            if all(1 <= num <= len(inactive_players) for num in player_numbers):
+                selected_players = [inactive_players[num - 1] for num in player_numbers]
+                for selected_player in selected_players:
+                    inactive_players.remove(selected_player)
+                    made_active_count += 1
+                    print(f"\n✓ {selected_player.upper()} has been made active")
+                if inactive_players:
+                    print(f"\nRemaining inactive players: {len(inactive_players)}")
+                else:
+                    print("\nAll players are now active.")
+                    break
+            else:
+                print(f"Please enter numbers between 1 and {len(inactive_players)}")
+        except ValueError:
+            print("Please enter valid numbers, ranges, or 'all'.")
 
     if made_active_count > 0:
         save_data()
