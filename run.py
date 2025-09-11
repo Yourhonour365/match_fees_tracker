@@ -1971,8 +1971,7 @@ def club_management():
     """
     while True:
         print("\n=== Club Management ===")
-        print("1) Switch club")
-        print("2) Delete club data")
+        print("1) Delete club data")
         print("b) Back to main menu")
         print()
 
@@ -1981,8 +1980,6 @@ def club_management():
         if choice == "b":
             break
         elif choice == "1":
-            print("Switch club not implemented yet.")
-        elif choice == "2":
             confirm = input("Are you sure you want to delete all club data? This cannot be undone. (yes/no): ").strip().lower()
             if confirm == 'yes':
                 global club_name, players, matches, inactive_players
