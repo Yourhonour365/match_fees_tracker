@@ -1199,7 +1199,7 @@ def show_team_sheets():
     print("A maximum of 8 matches can be selected for team sheets")
 
     while True:
-        choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5) or 'b' to go back (max 8 matches): ").strip()
+        choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back (max 8 matches): ").strip()
 
         if choice.lower() == 'b':
             return
@@ -1208,8 +1208,20 @@ def show_team_sheets():
             continue
 
         try:
-            # Parse comma-separated numbers
-            match_numbers = [int(x.strip()) for x in choice.split(',')]
+            if choice.lower() == 'all':
+                # Select all filtered matches (up to 8)
+                match_numbers = list(range(1, min(len(filtered_matches) + 1, 9)))
+            elif '-' in choice and ',' not in choice:
+                # Handle range (e.g., 1-5)
+                start, end = map(int, choice.split('-'))
+                if 1 <= start <= end <= len(filtered_matches):
+                    match_numbers = list(range(start, min(end + 1, 9)))
+                else:
+                    print(f"Range must be between 1 and {len(filtered_matches)}")
+                    continue
+            else:
+                # Handle individual numbers or comma-separated
+                match_numbers = [int(x.strip()) for x in choice.split(',')]
 
             # Validate all numbers are in range and limit to 8 matches
             if len(match_numbers) > 8:
@@ -1224,7 +1236,7 @@ def show_team_sheets():
             else:
                 print(f"Please enter numbers between 1 and {len(filtered_matches)}, separated by commas")
         except ValueError:
-            print("Please enter valid numbers separated by commas (e.g. 1,3,5) or 'b' to go back")
+            print("Please enter valid numbers separated by commas (e.g. 1,3,5 or 1-5 or 'all') or 'b' to go back")
 
     # Display team sheets in team selection format
     print("\n=== Team Sheets ===")
