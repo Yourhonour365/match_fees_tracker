@@ -2348,10 +2348,10 @@ def view_fee_balances():
                         if valid_numbers and match_numbers:
                             selected_matches = [filtered_matches[num - 1] for num in match_numbers]
 
-                            # Generate financial report
+                            # Generate financial report with compact formatting
                             print("\n=== Match Financial Report ===")
-                            print(f"{'Date':<12} {'Opponent':<25} {'Players':<8} {'Total Fees':<12} {'Paid':<12} {'Due':<12}")
-                            print("-" * 85)
+                            print(f"{'Date':<10} {'Opponent':<20} {'Players':<7} {'Total':<8} {'Paid':<8} {'Due':<8}")
+                            print("-" * 65)
 
                             grand_total_fees = 0
                             grand_total_paid = 0
@@ -2374,27 +2374,28 @@ def view_fee_balances():
                                     total_paid = paid_count * match["fee"]
                                     due = total_fees - total_paid
 
-                                    fees_display = f"£{total_fees:.2f}"
-                                    paid_display = f"£{total_paid:.2f}" if total_paid > 0 else "-"
-                                    due_display = f"£{due:.2f}" if due > 0 else "-"
+                                    fees_display = f"£{total_fees:.0f}"
+                                    paid_display = f"£{total_paid:.0f}" if total_paid > 0 else "-"
+                                    due_display = f"£{due:.0f}" if due > 0 else "-"
 
                                     grand_total_fees += total_fees
                                     grand_total_paid += total_paid
                                     grand_total_due += due
 
                                 player_display = str(player_count) if player_count > 0 else "-"
+                                opponent_short = match["opponent"][:19]  # Truncate long names
 
-                                print(f"{date_fmt:<12} {match['opponent']:<25} {player_display:<8} {fees_display:<12} {paid_display:<12} {due_display:<12}")
+                                print(f"{date_fmt:<10} {opponent_short:<20} {player_display:<7} {fees_display:<8} {paid_display:<8} {due_display:<8}")
 
-                            print("-" * 85)
+                            print("-" * 65)
 
                             # Summary totals
                             if grand_total_fees > 0:
-                                print(f"{'TOTALS':<45} £{grand_total_fees:.2f}     £{grand_total_paid:.2f}     £{grand_total_due:.2f}")
+                                print(f"{'TOTALS':<37} £{grand_total_fees:.0f}     £{grand_total_paid:.0f}     £{grand_total_due:.0f}")
                                 print(f"\nSummary for {len(selected_matches)} match(es):")
-                                print(f"• Total fees generated: £{grand_total_fees:.2f}")
-                                print(f"• Amount collected: £{grand_total_paid:.2f}")
-                                print(f"• Still due: £{grand_total_due:.2f}")
+                                print(f"• Total fees generated: £{grand_total_fees:.0f}")
+                                print(f"• Amount collected: £{grand_total_paid:.0f}")
+                                print(f"• Still due: £{grand_total_due:.0f}")
 
                                 if grand_total_fees > 0:
                                     collection_rate = (grand_total_paid / grand_total_fees) * 100
