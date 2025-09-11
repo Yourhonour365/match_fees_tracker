@@ -859,7 +859,7 @@ def player_management():
         print()
         print("b) Back to main menu")
 
-        choice = input("Choose option from player menu above:").strip().lower()
+        choice = input("Choose option: ").strip().lower()
 
         if choice == 'b':
             break
