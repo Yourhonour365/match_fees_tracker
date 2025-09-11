@@ -656,34 +656,130 @@ def list_matches():
     input("\nPress Enter to continue...")
 
 def show_team_sheets():
-    """Display team sheets for all matches"""
+    """Display team sheets with match selection"""
     if not matches:
         print("\nNo matches recorded yet.")
         return
 
-    sorted_matches = get_matches_sorted()
+    while True:  # Loop for filter selection
+        # Show filter options
+        print("\n=== Team Sheets ===")
+        print("Show matches:")
+        print("1) Recent + upcoming (last 2 weeks + next 2 weeks)")
+        print("2) Last month's matches")
+        print("3) Next month's matches")
+        print("4) All matches")
+        print("b) Back to main menu")
+        print()
 
-    print("\n=== Team Sheets ===")
-    for match in sorted_matches:
-        date_fmt = match["date"].strftime("%d/%m/%Y")
+        filter_choice = input("Choose filter: ").strip().lower()
+        if filter_choice == 'b':
+            return
+        if filter_choice not in ['1', '2', '3', '4']:
+            print("Please enter 1, 2, 3, 4, or b")
+            continue
+
+        filter_choice = int(filter_choice)
+
+        # Filter matches based on selection
+        from datetime import timedelta
+        today = datetime.now().date()
+
+        if filter_choice == 1:  # Recent + upcoming (4 weeks total)
+            start_date = today - timedelta(days=14)
+            end_date = today + timedelta(days=14)
+            filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+        elif filter_choice == 2:  # Last month
+            start_date = today - timedelta(days=30)
+            end_date = today
+            filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+        elif filter_choice == 3:  # Next month
+            start_date = today
+            end_date = today + timedelta(days=30)
+            filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+        elif filter_choice == 4:  # All matches
+            filtered_matches = get_matches_sorted()
+
+        if not filtered_matches:
+            print("\nNo matches found for the selected period. Try a different filter.")
+            continue  # Go back to filter menu
+
+        break  # Exit loop if we have matches
+
+    # Display matches for selection
+    print("\n=== Select Matches for Team Sheets ===")
+    print(f"{'No.':<4} {'Date':<10} {'Opponent':<25} {'Status':<15} {'Fee':<8}")
+    print("-" * 67)
+
+    for i, match in enumerate(filtered_matches, 1):
+        date_fmt = match["date"].strftime("%d %b %y")
         fee_fmt = f"£{match['fee']:.2f}"
 
-        # Determine if played or fixture
         if match["players"]:
-            status = f" (Played - {len(match['players'])} players)"
+            status = f"Team set ({len(match['players'])})"
         else:
-            status = " (Fixture - no team selected yet)"
+            status = "No team yet"
 
-        print(f"\n{club_name} vs {match['opponent']} - {date_fmt}{status}")
-        print(f"Match Fee: {fee_fmt}")
+        print(f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {status:<15} {fee_fmt:<8}")
+
+    print()
+    print("A maximum of 8 matches can be selected for team sheets")
+
+    while True:
+        choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5) or 'b' to go back (max 8 matches): ").strip()
+
+        if choice.lower() == 'b':
+            return
+
+        if not choice:
+            continue
+
+        try:
+            # Parse comma-separated numbers
+            match_numbers = [int(x.strip()) for x in choice.split(',')]
+
+            # Validate all numbers are in range and limit to 8 matches
+            if len(match_numbers) > 8:
+                print("Maximum 8 matches can be selected at once for team sheets")
+                continue
+
+            valid_numbers = all(1 <= num <= len(filtered_matches) for num in match_numbers)
+
+            if valid_numbers and match_numbers:
+                selected_matches = [filtered_matches[num - 1] for num in match_numbers]
+                break
+            else:
+                print(f"Please enter numbers between 1 and {len(filtered_matches)}, separated by commas")
+        except ValueError:
+            print("Please enter valid numbers separated by commas (e.g. 1,3,5) or 'b' to go back")
+
+    # Display team sheets in team selection format
+    print("\n=== Team Sheets ===")
+
+    for i, match in enumerate(selected_matches, 1):
+        date_fmt = match["date"].strftime("%d %b %y")
+        header = f"{i}. {date_fmt} VS {match['opponent']}".upper()
+
+        print(f"\n{header}")
+        print("-" * 50)
 
         if match["players"]:
-            print("Team:")
-            for player in match["players"]:
-                paid_status = " ✓ Paid" if player in match.get("paid", []) else " - Fee due"
-                print(f"  • {player}{paid_status}")
+            print(f"Team ({len(match['players'])} players):")
+            for j, player in enumerate(match["players"], 1):
+                print(f"  {j:2}. {player}")
         else:
             print("No players selected yet")
+
+    # Overall summary for multiple matches
+    if len(selected_matches) > 1:
+        total_matches = len(selected_matches)
+        total_all_players = sum(len(m["players"]) for m in selected_matches)
+
+        print(f"\n{'='*50}")
+        print(f"SUMMARY FOR {total_matches} MATCHES:")
+        print(f"Total players selected: {total_all_players}")
+
+    input("\nPress Enter to continue...")
 
 def list_matches_indexed():
     """
