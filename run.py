@@ -545,9 +545,11 @@ def mark_attendance():
         available_display = "-" if available_count == 0 else str(available_count)
 
         print(f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {selected_display:<8} {available_display:<9}")
+    print()
+    print("A maximum of 4 matches can be selected for team selections")
 
     while True:
-        choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5) or 'b' to go back: ").strip()
+        choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5) or 'b' to go back (max 4 matches): ").strip()
 
         if choice.lower() == 'b':
             return  # Go back to main menu
@@ -561,7 +563,8 @@ def mark_attendance():
 
             # Validate all numbers are in range and limit to 4 matches
             if len(match_numbers) > 4:
-                print("Maximum 4 matches can be selected at once")
+                print()
+                print("Maximum 4 matches can be selected at once for team selection")
                 continue
 
             valid_numbers = all(1 <= num <= len(filtered_matches) for num in match_numbers)
@@ -601,7 +604,7 @@ def mark_attendance():
             # Selected player column
             if row < len(match["players"]):
                 player = match["players"][row]
-                status = " (Inac)" if player in inactive_players else ""
+                status = " (INAC)" if player in inactive_players else ""
                 selected_display = f" {row+1}. {player}{status}"
             else:
                 selected_display = ""
@@ -612,17 +615,16 @@ def mark_attendance():
 
             print(f"{selected_display:<30} | {avail1:<18} | {avail2}")
 
-        if not match["players"]:
-            print(f"{'No players selected':<30} | {col1[0] if col1 else '':<18} | {col2[0] if col2 else ''}")
-
+        # Show "No players selected" only if no players are selected
         if not match["players"]:
             print(f"{'No players selected':<30} | {col1[0] if col1 else '':<18} | {col2[0] if col2 else ''}")
 
     print(f"\nSelected {len(selected_matches)} match(es) for team selection.")
+
     print("\nOptions:")
     print("1) Add players to matches")
     print("2) Remove players from matches")
-    print("3) Return to main menu")
+    print("b) Return to main menu")
     while True:
         choice = input("\nChoose option: ").strip()
         if choice == '1':
@@ -631,15 +633,15 @@ def mark_attendance():
         elif choice == '2':
             print("Remove players functionality will be implemented next.")
             break
-        elif choice == '3':
+        elif choice == 'b':
             break  # Return to main menu
         else:
-            print("Please enter 1, 2, or 3")
+            print("Please enter 1, 2, or b")
 
 def list_matches():
     """
     Print all matches currently stored in the matches list.
-    Shows date as DD-MMM-YYYY and fee as £x.xx.
+    Shows date as DD-MMM-YYYY without fees.
     """
     print("\n=== Fixture List ===")
     if not matches:
@@ -648,8 +650,10 @@ def list_matches():
 
     for match in get_matches_sorted():
         date_fmt = match["date"].strftime("%d %b %y")
-        fee_fmt = f"£{match['fee']:.2f}"
-        print(f"{date_fmt} vs {match['opponent']} - {fee_fmt}")
+        print(f"{date_fmt} vs {match['opponent']}")
+
+    print(f"\nTotal: {len(matches)} fixture(s)")
+    input("\nPress Enter to continue...")
 
 def show_team_sheets():
     """Display team sheets for all matches"""
