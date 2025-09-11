@@ -993,19 +993,141 @@ def mark_attendance():
 
 def list_matches():
     """
-    Print all matches currently stored in the matches list.
-    Shows date as DD-MMM-YYYY without fees.
+    Display fixture list with match selection functionality
     """
-    print("\n=== Fixture List ===")
     if not matches:
         print("\nNo matches scheduled yet.")
         return
 
-    for match in get_matches_sorted():
-        date_fmt = match["date"].strftime("%d %b %y")
-        print(f"{date_fmt} vs {match['opponent']}")
+    while True:  # Loop for filter selection
+        # Show filter options
+        print("\n=== Fixture List ===")
+        print("Show matches:")
+        print("1) Recent + upcoming (last 2 weeks + next 2 weeks)")
+        print("2) Last month's matches")
+        print("3) Next month's matches")
+        print("4) All matches")
+        print("b) Back to main menu")
+        print()
 
-    print(f"\nTotal: {len(matches)} fixture(s)")
+        filter_choice = input("Choose filter: ").strip().lower()
+        if filter_choice == 'b':
+            return
+        if filter_choice not in ['1', '2', '3', '4']:
+            print("Please enter 1, 2, 3, 4, or b")
+            continue
+
+        filter_choice = int(filter_choice)
+
+        # Filter matches based on selection
+        from datetime import timedelta
+        today = datetime.now().date()
+
+        if filter_choice == 1:  # Recent + upcoming (4 weeks total)
+            start_date = today - timedelta(days=14)
+            end_date = today + timedelta(days=14)
+            filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+        elif filter_choice == 2:  # Last month
+            start_date = today - timedelta(days=30)
+            end_date = today
+            filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+        elif filter_choice == 3:  # Next month
+            start_date = today
+            end_date = today + timedelta(days=30)
+            filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+        elif filter_choice == 4:  # All matches
+            filtered_matches = get_matches_sorted()
+
+        if not filtered_matches:
+            print("\nNo matches found for the selected period. Try a different filter.")
+            continue  # Go back to filter menu
+
+        break  # Exit loop if we have matches
+
+    # Display fixtures for selection
+    print("\n=== Select Fixtures to View ===")
+    print(f"{'No.':<4} {'Date':<10} {'Opponent':<25} {'Status':<15}")
+    print("-" * 58)
+
+    for i, match in enumerate(filtered_matches, 1):
+        date_fmt = match["date"].strftime("%d %b %y")
+
+        if match["players"]:
+            status = f"Team set ({len(match['players'])})"
+        else:
+            status = "Fixture only"
+
+        print(f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {status:<15}")
+
+    print("A maximum of 10 matches can be selected for fixture details")
+
+    while True:
+        choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back (max 10 matches): ").strip()
+
+        if choice.lower() == 'b':
+            return
+
+        if not choice:
+            continue
+
+        try:
+            if choice.lower() == 'all':
+                # Select all filtered matches (up to 10)
+                match_numbers = list(range(1, min(len(filtered_matches) + 1, 11)))
+            elif '-' in choice and ',' not in choice:
+                # Handle range (e.g., 1-5)
+                start, end = map(int, choice.split('-'))
+                if 1 <= start <= end <= len(filtered_matches):
+                    match_numbers = list(range(start, min(end + 1, 11)))
+                else:
+                    print(f"Range must be between 1 and {len(filtered_matches)}")
+                    continue
+            else:
+                # Handle individual numbers or comma-separated
+                match_numbers = [int(x.strip()) for x in choice.split(',')]
+
+            # Validate all numbers are in range and limit to 10 matches
+            if len(match_numbers) > 10:
+                print("Maximum 10 matches can be selected at once for fixture details")
+                continue
+
+            valid_numbers = all(1 <= num <= len(filtered_matches) for num in match_numbers)
+
+            if valid_numbers and match_numbers:
+                selected_matches = [filtered_matches[num - 1] for num in match_numbers]
+                break
+            else:
+                print(f"Please enter numbers between 1 and {len(filtered_matches)}, separated by commas")
+        except ValueError:
+            print("Please enter valid numbers separated by commas (e.g. 1,3,5) or 'b' to go back")
+
+    # Display selected fixture details
+    print("\n=== Fixture Details ===")
+
+    for match in selected_matches:
+        date_fmt = match["date"].strftime("%A, %d %B %Y")
+
+        print(f"\n{club_name} vs {match['opponent']}")
+        print(f"Date: {date_fmt}")
+
+        if match["players"]:
+            print(f"Status: Team selected ({len(match['players'])} players)")
+        else:
+            print("Status: Fixture scheduled - no team selected yet")
+
+        print("-" * 50)
+
+    # Summary
+    if len(selected_matches) > 1:
+        print(f"\nSummary for {len(selected_matches)} fixtures:")
+        fixtures_with_teams = sum(1 for m in selected_matches if m["players"])
+        fixtures_without_teams = len(selected_matches) - fixtures_with_teams
+
+        if fixtures_with_teams > 0:
+            print(f"Fixtures with teams selected: {fixtures_with_teams}")
+        if fixtures_without_teams > 0:
+            print(f"Fixtures needing team selection: {fixtures_without_teams}")
+
     input("\nPress Enter to continue...")
 
 def show_team_sheets():
