@@ -44,7 +44,7 @@ A Python tool to help amateur sports clubs easily collect and manage match fees.
 ### Local Development
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/Yourhonour365/match_fees_tracker.git
 cd match_fees_tracker
 
 # Create virtual environment (recommended)
