@@ -203,53 +203,107 @@ def list_players():
 
 def add_match():
     """
-    Ask for a match description and store it in the matches list.
-    Validates:
-      - opponent: non-empty, smart title-cased
-      - date: DD/MM/YY or DD/MM/YYYY, stored as datetime.date
-      - fee: numeric, echoed as £x.xx
+    Handle fixture operations - add, edit, or delete matches
     """
-
     while True:
-        opponent = smart_title(input("\nEnter match opponent: ").strip())
+        print("\n=== Fixtures ===")
+
+        if matches:
+            # Show existing fixtures
+            sorted_matches = get_matches_sorted()
+            print(f"\n{'No.':<3} {'Date':<10} {'Opponent':<20} {'Fee':<8}")
+            print("-" * 45)
+
+            for i, match in enumerate(sorted_matches, 1):
+                date_fmt = match["date"].strftime("%d %b %y")
+                fee_fmt = f"£{match['fee']:.2f}"
+                print(f"{i:<3} {date_fmt:<10} {match['opponent']:<20} {fee_fmt:<8}")
+
+            print("-" * 45)
+            print(f"Total: {len(matches)} fixture(s)")
+        else:
+            print("\nNo fixtures scheduled yet.")
+
+        print("\nOptions:")
+        print("1) Add new fixture")
+        if matches:
+            print("2) Edit fixture")
+            print("3) Delete fixture")
+        print("b) Back to main menu")
+        print()
+
+        choice = input("Choose option: ").strip().lower()
+
+        if choice == 'b':
+            break
+        elif choice == '1':
+            add_new_fixture()
+        elif choice == '2' and matches:
+            edit_existing_fixture()
+        elif choice == '3' and matches:
+            delete_existing_fixture()
+        else:
+            print("Please choose a valid option.")
+
+def add_new_fixture():
+    """Add a new fixture"""
+    print("\n=== Add New Fixture ===")
+    print("Enter fixture details (type 'b' at any prompt to go back)\n")
+
+    # Get opponent
+    while True:
+        opponent_input = input("Enter match opponent (or 'b' to go back): ").strip()
+        if opponent_input.lower() == 'b':
+            return
+
+        opponent = smart_title(opponent_input)
         if not opponent:
-            print("\nOpponent cannot be empty. Please try again.\n")
+            print("Opponent cannot be empty. Please try again.")
             continue
 
-        print(f"\nOpponent: {opponent}\n")
+        print(f"Opponent: {opponent}")
         break
 
+    # Get date
     while True:
-        date_str = input("Enter match date (DD/MM/YY or DD/MM/YYYY): ").strip()
-        if not date_str:
-            print("\nDate cannot be empty. Please try again.")
+        date_input = input("Enter match date (DD/MM/YY or DD/MM/YYYY, or 'b' to go back): ").strip()
+        if date_input.lower() == 'b':
+            return
+
+        if not date_input:
+            print("Date cannot be empty. Please try again.")
             continue
+
         try:
-            parsed_date = datetime.strptime(date_str, "%d/%m/%y").date()
+            parsed_date = datetime.strptime(date_input, "%d/%m/%y").date()
             break
         except ValueError:
             try:
-                parsed_date = datetime.strptime(date_str, "%d/%m/%Y").date()
+                parsed_date = datetime.strptime(date_input, "%d/%m/%Y").date()
                 break
             except ValueError:
-                print(
-                    "\nInvalid date. Please use DD/MM/YY (e.g. 05/09/25) or DD/MM/YYYY (e.g. 05/09/2025)."
-                )
+                print("Invalid date. Please use DD/MM/YY (e.g. 05/09/25) or DD/MM/YYYY (e.g. 05/09/2025).")
                 continue
 
+    # Get fee
     while True:
-        fee_str = input("\nEnter match fee: ").strip()
-        if not fee_str:
-            print("\nFee cannot be empty. Please try again.")
-            continue
-        try:
-            fee = float(fee_str)
-            print(f"\nMatch fee recorded: £{fee:.2f}")
-            break
-        except ValueError:
-            print("\nInvalid fee. Please enter a number.")
+        fee_input = input("Enter match fee (or 'b' to go back): ").strip()
+        if fee_input.lower() == 'b':
+            return
+
+        if not fee_input:
+            print("Fee cannot be empty. Please try again.")
             continue
 
+        try:
+            fee = float(fee_input)
+            print(f"Match fee recorded: £{fee:.2f}")
+            break
+        except ValueError:
+            print("Invalid fee. Please enter a number.")
+            continue
+
+    # Create match object
     match = {
         "opponent": opponent,
         "date": parsed_date,
@@ -257,16 +311,135 @@ def add_match():
         "players": [],
         "paid": [],
     }
+
+    # Check for duplicate matches
     for existing_match in matches:
         if existing_match["opponent"] == opponent and existing_match["date"] == parsed_date:
             print(f"\n⚠ Note: You already have {club_name} vs {opponent} on {parsed_date.strftime('%d/%m/%Y')}")
-            confirm = input("Add this match anyway? (y/n): ").strip().lower()
-            if confirm != 'y':
-                print("\nMatch not added.")
-                return
+            while True:
+                confirm = input("Add this match anyway? (y/n/b to go back): ").strip().lower()
+                if confirm == 'b':
+                    return
+                elif confirm == 'y':
+                    break
+                elif confirm == 'n':
+                    print("Match not added.")
+                    return
+                else:
+                    print("Please enter 'y', 'n', or 'b'")
             break
+
+    # Add the match
     matches.append(match)
     save_data()
+    print(f"\n✓ Fixture added: {club_name} vs {opponent} on {parsed_date.strftime('%d/%m/%Y')} - £{fee:.2f}")
+
+def edit_existing_fixture():
+    """Edit an existing fixture"""
+    sorted_matches = get_matches_sorted()
+
+    print("\n=== Edit Fixture ===")
+
+    # Select fixture to edit
+    while True:
+        choice = input("Enter fixture number to edit (or 'b' to go back): ").strip()
+        if choice.lower() == 'b':
+            return
+        if choice.isdigit() and 1 <= int(choice) <= len(sorted_matches):
+            selected_match = sorted_matches[int(choice) - 1]
+            break
+        print(f"Please enter 1-{len(sorted_matches)} or 'b'")
+
+    # Show what we're editing
+    print(f"\nEditing: {selected_match['opponent']} on {selected_match['date'].strftime('%d/%m/%Y')}")
+
+    # Simple edit options
+    while True:
+        print(f"\nCurrent details:")
+        print(f"Date: {selected_match['date'].strftime('%d/%m/%Y')}")
+        print(f"Opponent: {selected_match['opponent']}")
+        print(f"Fee: £{selected_match['fee']:.2f}")
+
+        print(f"\nWhat to edit?")
+        print("1) Date")
+        print("2) Opponent")
+        print("3) Fee")
+        print("b) Back")
+
+        edit_choice = input("\nChoose: ").strip().lower()
+
+        if edit_choice == 'b':
+            return
+        elif edit_choice == '1':
+            # Edit date
+            new_date = input("New date (DD/MM/YY or DD/MM/YYYY): ").strip()
+            try:
+                parsed_date = datetime.strptime(new_date, "%d/%m/%y").date()
+            except ValueError:
+                try:
+                    parsed_date = datetime.strptime(new_date, "%d/%m/%Y").date()
+                except ValueError:
+                    print("Invalid date format.")
+                    continue
+            selected_match["date"] = parsed_date
+            save_data()
+            print(f"✓ Date updated to {parsed_date.strftime('%d/%m/%Y')}")
+
+        elif edit_choice == '2':
+            # Edit opponent
+            new_opponent = smart_title(input("New opponent: ").strip())
+            if new_opponent:
+                selected_match["opponent"] = new_opponent
+                save_data()
+                print(f"✓ Opponent updated to {new_opponent}")
+
+        elif edit_choice == '3':
+            # Edit fee
+            try:
+                new_fee = float(input("New fee: ").strip())
+                selected_match["fee"] = new_fee
+                save_data()
+                print(f"✓ Fee updated to £{new_fee:.2f}")
+            except ValueError:
+                print("Invalid fee.")
+        else:
+            print("Please choose 1, 2, 3, or b")
+
+def delete_existing_fixture():
+    """Delete an existing fixture"""
+    sorted_matches = get_matches_sorted()
+
+    print("\n=== Delete Fixture ===")
+
+    # Select fixture to delete
+    while True:
+        choice = input("Enter fixture number to delete (or 'b' to go back): ").strip()
+        if choice.lower() == 'b':
+            return
+        if choice.isdigit() and 1 <= int(choice) <= len(sorted_matches):
+            selected_match = sorted_matches[int(choice) - 1]
+            break
+        print(f"Please enter 1-{len(sorted_matches)} or 'b'")
+
+    # Confirm deletion
+    print(f"\nDelete: {selected_match['opponent']} on {selected_match['date'].strftime('%d/%m/%Y')}?")
+    if selected_match["players"]:
+        print(f"⚠ WARNING: This fixture has {len(selected_match['players'])} players selected")
+
+    confirm = input("Type 'DELETE' to confirm: ").strip()
+
+    if confirm == 'DELETE':
+        # Find and remove from original matches list
+        for i, match in enumerate(matches):
+            if (match["date"] == selected_match["date"] and
+                match["opponent"] == selected_match["opponent"]):
+                matches.pop(i)
+                break
+
+        save_data()
+        print(f"✓ Fixture deleted")
+    else:
+        print("Delete cancelled.")
 
 def mark_attendance():
     """
@@ -323,8 +496,8 @@ def mark_attendance():
 
     # Display filtered matches in table format
     print("\n=== Matches ===")
-    print(f"{'No.':<4} {'Date':<10} {'Opponent':<15} {'Selected':<8} {'Available':<9}")
-    print("-" * 50)
+    print(f"{'No.':<4} {'Date':<10} {'Opponent':<25} {'Selected':<8} {'Available':<9}")
+    print("-" * 60)
 
     for i, match in enumerate(filtered_matches, 1):
         date_fmt = match["date"].strftime("%d %b %y")
@@ -335,7 +508,7 @@ def mark_attendance():
         selected_display = "-" if selected_count == 0 else str(selected_count)
         available_display = "-" if available_count == 0 else str(available_count)
 
-        print(f"{i:<4} {date_fmt:<10} {match['opponent']:<15} {selected_display:<8} {available_display:<9}")
+        print(f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {selected_display:<8} {available_display:<9}")
 
     while True:
         choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5): ").strip()
