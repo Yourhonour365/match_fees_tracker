@@ -1061,21 +1061,19 @@ def show_team_sheets():
 
     # Display matches for selection
     print("\n=== Select Matches for Team Sheets ===")
-    print(f"{'No.':<4} {'Date':<10} {'Opponent':<25} {'Status':<15} {'Fee':<8}")
-    print("-" * 67)
+    print(f"{'No.':<4} {'Date':<10} {'Opponent':<25} {'Status':<15}")
+    print("-" * 58)
 
     for i, match in enumerate(filtered_matches, 1):
         date_fmt = match["date"].strftime("%d %b %y")
-        fee_fmt = f"£{match['fee']:.2f}"
 
         if match["players"]:
             status = f"Team set ({len(match['players'])})"
         else:
             status = "No team yet"
 
-        print(f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {status:<15} {fee_fmt:<8}")
+        print(f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {status:<15}")
 
-    print()
     print("A maximum of 8 matches can be selected for team sheets")
 
     while True:
