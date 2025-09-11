@@ -147,19 +147,29 @@ def add_player():
     """
     print("\n=== Add Players ===")
     print("Enter player names one at a time.")
-    print("Press Enter with empty name when finished.\n")
+    print("Press Enter with empty name when finished.")
+    print("Type 'b' to go back to player management.\n")
 
     added_count = 0
 
     while True:
-        name = smart_title(input("Enter player name (or Enter to finish): ").strip())
+        name_input = input("Enter player name (or Enter to finish, 'b' to go back): ").strip()
 
-        if not name:  # Empty input - finish adding
+        if not name_input:  # Empty input - finish adding
             if added_count == 0:
                 print("\nNo players added.")
             else:
                 print(f"\nFinished. Added {added_count} player(s).")
             break
+
+        if name_input.lower() == 'b':  # Back option
+            if added_count > 0:
+                print(f"\nReturning to player management. Added {added_count} player(s).")
+            else:
+                print("\nReturning to player management.")
+            break
+
+        name = smart_title(name_input)
 
         if any(ch.isdigit() for ch in name):
             print("Player name cannot contain numbers. Please try again.")
