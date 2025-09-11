@@ -14,8 +14,8 @@ A Python tool to help amateur sports clubs easily collect and manage match fees.
 ### Phase 1: Core Python Logic ✅
 - [x] Basic match and player data structures
 - [x] Terminal-based fee tracking
-- [ ] Data persistence (JSON/CSV export)
-- [ ] Payment reporting and summaries
+- [x] Data persistence (JSON/CSV export)
+- [x] Payment reporting and summaries
 
 ### Phase 2: Payment Integration
 - [ ] Generate secure payment links for easy sharing
