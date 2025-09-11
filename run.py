@@ -195,11 +195,44 @@ def add_player():
 
 def list_players():
     """
-    Print all players currently stored in the players list.
+    Print all players in two columns with status information.
     """
-    print("\n=== Current Players ===\n")
-    for player in players:
-        print(player)
+    print("\n=== Current Players ===")
+
+    if not players:
+        print("\nNo players registered yet.")
+        return
+
+    sorted_players = sorted(players)
+    total = len(sorted_players)
+    half = (total + 1) // 2  # Round up for odd numbers
+
+    print("-" * 64)
+    left_header = f"{'No.':<3} {'Player':<20} {'Status':<6}"
+    right_header = f"{'No.':<3} {'Player':<20} {'Status':<6}"
+    print(f"{left_header}  {right_header}")
+    print("-" * 64)
+
+    for i in range(half):
+        # Left column
+        left_no = i + 1
+        left_player = sorted_players[i][:20]  # Truncate if too long
+        left_status = 'Inac' if sorted_players[i] in inactive_players else 'Actv'
+        left_line = f"{left_no:<3} {left_player:<20} {left_status:<6}"
+
+        # Right column (if exists)
+        right_idx = i + half
+        if right_idx < total:
+            right_no = right_idx + 1
+            right_player = sorted_players[right_idx][:20]  # Truncate if too long
+            right_status = 'Inac' if sorted_players[right_idx] in inactive_players else 'Actv'
+            right_line = f"{right_no:<3} {right_player:<20} {right_status:<6}"
+            print(f"{left_line}  {right_line}")
+        else:
+            print(left_line)
+
+    print("-" * 64)
+    print(f"Total: {total} players ({len([p for p in players if p not in inactive_players])} active, {len(inactive_players)} inactive)")
 
 def add_match():
     """
@@ -511,7 +544,11 @@ def mark_attendance():
         print(f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {selected_display:<8} {available_display:<9}")
 
     while True:
-        choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5): ").strip()
+        choice = input("\nChoose match number(s) (e.g. 1 or 1,3,5) or 'b' to go back: ").strip()
+
+        if choice.lower() == 'b':
+            return  # Go back to main menu
+
         if not choice:
             continue
 
@@ -532,7 +569,7 @@ def mark_attendance():
             else:
                 print(f"Please enter numbers between 1 and {len(filtered_matches)}, separated by commas")
         except ValueError:
-            print("Please enter valid numbers separated by commas (e.g. 1,3,5)")
+            print("Please enter valid numbers separated by commas (e.g. 1,3,5) or 'b' to go back")
 
     # Show team selection table for selected matches
     print("\n=== Team Selection ===")
