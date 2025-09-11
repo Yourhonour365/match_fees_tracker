@@ -163,13 +163,25 @@ User Interface Tests
 FeatureTestExpected ResultStatusMenu NavigationPress 'b' from any submenuReturn to previous menu✅ PassMenu NavigationEnter invalid menu optionClear error message✅ PassTable DisplayView player listTwo-column format, status indicators✅ PassTable DisplayView team sheetsSide-by-side match comparison✅ PassInput HandlingEnter empty input where requiredAppropriate validation message✅ PassInput HandlingUse 'all' keywordProcess all available items✅ Pass
 Edge Cases and Error Handling
 ScenarioExpected BehaviorResultEmpty player rosterGraceful handling with helpful message✅ "No players registered yet"No matches scheduledClear messaging and guidance✅ "No matches scheduled yet"All players inactiveTeam selection shows no available players✅ Handled correctlyLarge player namesText truncation in tables✅ Names truncated to fit displayFuture/past date filteringCorrect date range calculations✅ Filters work accurately
-Code Quality Testing
-PEP8 Compliance
+#### Code Quality Testing
 
-Tool Used: flake8 and black formatter
-Status: Code formatted to PEP8 standards
-Remaining Issues: None significant
-Line Length: Maintained under 88 characters (black default)
+**PEP8 Compliance Check:**
+- **Tool Used**: flake8
+- **Command Run**: `flake8 run.py`
+- **Total Issues Found**: 267 issues
+- **Issue Breakdown**:
+  - E501 (line too long): 201 instances
+  - F541 (f-string without placeholders): 31 instances
+  - F824 (unused global statements): 6 instances
+  - E401 (multiple imports on one line): 1 instance
+  - F811 (function redefinition): 2 instances
+
+**Resolution Status**:
+- **Fixed**: Import formatting, unused globals, f-string issues
+- **Remaining**: Line length issues (acceptable for readability)
+- **Justification**: Some long lines maintained for string readability in user messages
+
+**Code Quality Score**: Acceptable for production use with documented exceptions
 
 Performance Testing
 

@@ -1,5 +1,6 @@
 from datetime import datetime, date
-import json, os
+import json
+import os
 
 DATA_FILE = "data.json"
 
