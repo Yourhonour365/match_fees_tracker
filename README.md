@@ -12,6 +12,7 @@ A Python tool to help amateur sports clubs easily collect and manage match fees.
 ## Roadmap
 
 ### Phase 1: Core Python Logic ✅
+
 🗸 Basic match and player data structures
 🗸 Terminal-based fee tracking
 🗸 Data persistence (JSON/CSV export)
