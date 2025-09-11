@@ -799,70 +799,236 @@ def record_payment():
     print(f"\n✓ Payment recorded: {player_who_paid} paid £{selected_match['fee']:.2f}")
 
 def view_fee_balances():
-    """Show fee balances for all players in two columns"""
-    if not players:
-        print("\nNo players registered yet.")
-        return
+    """Show fee balance options"""
+    while True:
+        print("\n=== Match Fee Reports ===")
+        print("1) Player fee balances")
+        print("2) Match financial report")
+        print("b) Back to main menu")
+        print()
 
-    print("\n=== Match Fee Balances ===")
+        choice = input("Choose option: ").strip().lower()
 
-    # Calculate balances for all players
-    player_balances = []
-    total_outstanding = 0
+        if choice == 'b':
+            break
+        elif choice == '1':
+            # Show player fee balances
+            if not players:
+                print("\nNo players registered yet.")
+                input("\nPress Enter to continue...")
+                continue
 
-    for player in sorted(players):
-        total_owed = 0
-        total_paid = 0
+            print("\n=== Player Fee Balances ===")
 
-        for match in matches:
-            if player in match.get("players", []):
-                total_owed += match["fee"]
-                if player in match.get("paid", []):
-                    total_paid += match["fee"]
+            # Calculate balances for all players
+            player_balances = []
+            total_outstanding = 0
 
-        balance_due = total_owed - total_paid
-        total_outstanding += balance_due
+            for player in sorted(players):
+                total_owed = 0
+                total_paid = 0
 
-        # Only include players who owe money
-        if balance_due > 0:
-            player_balances.append((player, balance_due))
+                for match in matches:
+                    if player in match.get("players", []):
+                        total_owed += match["fee"]
+                        if player in match.get("paid", []):
+                            total_paid += match["fee"]
 
-    if not player_balances:
-        print("\nNo outstanding fees - all players are up to date!")
-        input("\nPress Enter to continue...")
-        return
+                balance_due = total_owed - total_paid
+                total_outstanding += balance_due
 
-    # Display in two columns
-    total_players = len(player_balances)
-    half = (total_players + 1) // 2
+                # Only include players who owe money
+                if balance_due > 0:
+                    player_balances.append((player, balance_due))
 
-    print("-" * 64)
-    left_header = f"{'Player':<20} {'Due':<8}"
-    right_header = f"{'Player':<20} {'Due':<8}"
-    print(f"{left_header}  {right_header}")
-    print("-" * 64)
+            if not player_balances:
+                print("\nNo outstanding fees - all players are up to date!")
+                input("\nPress Enter to continue...")
+                continue
 
-    for i in range(half):
-        # Left column
-        left_player, left_amount = player_balances[i]
-        left_player_display = left_player[:19]  # Truncate if too long
-        left_line = f"{left_player_display:<20} £{left_amount:.2f}  "
+            # Display in two columns
+            total_players = len(player_balances)
+            half = (total_players + 1) // 2
 
-        # Right column (if exists)
-        right_idx = i + half
-        if right_idx < total_players:
-            right_player, right_amount = player_balances[right_idx]
-            right_player_display = right_player[:19]
-            right_line = f"{right_player_display:<20} £{right_amount:.2f}"
-            print(f"{left_line} {right_line}")
+            print("-" * 70)
+            left_header = f"{'Player':<20} {'Due':<8}"
+            right_header = f"{'Player':<20} {'Due':<8}"
+            print(f"{left_header}  {right_header}")
+            print("-" * 70)
+
+            for i in range(half):
+                # Left column
+                left_player, left_amount = player_balances[i]
+                left_player_display = left_player[:19]  # Truncate if too long
+                left_line = f"{left_player_display:<20} £{left_amount:.2f}  "
+
+                # Right column (if exists)
+                right_idx = i + half
+                if right_idx < total_players:
+                    right_player, right_amount = player_balances[right_idx]
+                    right_player_display = right_player[:19]
+                    right_line = f"{right_player_display:<20} £{right_amount:.2f}"
+                    print(f"{left_line} {right_line}")
+                else:
+                    print(left_line)
+
+            print("-" * 70)
+            print(f"TOTAL OUTSTANDING: £{total_outstanding:.2f}")
+            print(f"Players with fees due: {len(player_balances)}")
+
+            input("\nPress Enter to continue...")
+
+        elif choice == '2':
+            # Match financial report
+            if not matches:
+                print("\nNo matches recorded yet.")
+                input("\nPress Enter to continue...")
+                continue
+
+            # Filter selection
+            while True:
+                print("\n=== Match Financial Report ===")
+                print("Show matches:")
+                print("1) Recent + upcoming (last 2 weeks + next 2 weeks)")
+                print("2) Last month's matches")
+                print("3) Next month's matches")
+                print("4) All matches")
+                print("b) Back to fee reports menu")
+                print()
+
+                filter_choice = input("Choose filter: ").strip().lower()
+                if filter_choice == 'b':
+                    break
+                if filter_choice not in ['1', '2', '3', '4']:
+                    print("Please enter 1, 2, 3, 4, or b")
+                    continue
+
+                filter_choice = int(filter_choice)
+
+                # Filter matches
+                from datetime import timedelta
+                today = datetime.now().date()
+
+                if filter_choice == 1:
+                    start_date = today - timedelta(days=14)
+                    end_date = today + timedelta(days=14)
+                    filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+                elif filter_choice == 2:
+                    start_date = today - timedelta(days=30)
+                    end_date = today
+                    filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+                elif filter_choice == 3:
+                    start_date = today
+                    end_date = today + timedelta(days=30)
+                    filtered_matches = [m for m in get_matches_sorted() if start_date <= m["date"] <= end_date]
+                elif filter_choice == 4:
+                    filtered_matches = get_matches_sorted()
+
+                if not filtered_matches:
+                    print("\nNo matches found for the selected period. Try a different filter.")
+                    continue
+
+                # Show matches for selection
+                print("\n=== Select Matches for Financial Report ===")
+                print(f"{'No.':<4} {'Date':<10} {'Opponent':<25} {'Players':<8} {'Fee':<8}")
+                print("-" * 60)
+
+                for i, match in enumerate(filtered_matches, 1):
+                    date_fmt = match["date"].strftime("%d %b %y")
+                    player_count = len(match["players"]) if match["players"] else 0
+                    player_display = str(player_count) if player_count > 0 else "-"
+                    fee_fmt = f"£{match['fee']:.2f}"
+
+                    print(f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {player_display:<8} {fee_fmt:<8}")
+
+                print("A maximum of 6 matches can be selected for financial reports")
+
+                # Match selection
+                while True:
+                    choice_input = input("\nChoose match number(s) (e.g. 1 or 1,3,5) or 'b' to go back (max 6 matches): ").strip()
+
+                    if choice_input.lower() == 'b':
+                        break
+
+                    if not choice_input:
+                        continue
+
+                    try:
+                        match_numbers = [int(x.strip()) for x in choice_input.split(',')]
+
+                        if len(match_numbers) > 6:
+                            print("Maximum 6 matches can be selected at once for financial reports")
+                            continue
+
+                        valid_numbers = all(1 <= num <= len(filtered_matches) for num in match_numbers)
+
+                        if valid_numbers and match_numbers:
+                            selected_matches = [filtered_matches[num - 1] for num in match_numbers]
+
+                            # Generate financial report
+                            print("\n=== Match Financial Report ===")
+                            print(f"{'Date':<12} {'Opponent':<25} {'Players':<8} {'Total Fees':<12} {'Paid':<12} {'Due':<12}")
+                            print("-" * 85)
+
+                            grand_total_fees = 0
+                            grand_total_paid = 0
+                            grand_total_due = 0
+
+                            for match in selected_matches:
+                                date_fmt = match["date"].strftime("%d %b %y")
+                                player_count = len(match["players"])
+
+                                if player_count == 0:
+                                    total_fees = 0
+                                    total_paid = 0
+                                    due = 0
+                                    fees_display = "-"
+                                    paid_display = "-"
+                                    due_display = "-"
+                                else:
+                                    total_fees = player_count * match["fee"]
+                                    paid_count = len(match.get("paid", []))
+                                    total_paid = paid_count * match["fee"]
+                                    due = total_fees - total_paid
+
+                                    fees_display = f"£{total_fees:.2f}"
+                                    paid_display = f"£{total_paid:.2f}" if total_paid > 0 else "-"
+                                    due_display = f"£{due:.2f}" if due > 0 else "-"
+
+                                    grand_total_fees += total_fees
+                                    grand_total_paid += total_paid
+                                    grand_total_due += due
+
+                                player_display = str(player_count) if player_count > 0 else "-"
+
+                                print(f"{date_fmt:<12} {match['opponent']:<25} {player_display:<8} {fees_display:<12} {paid_display:<12} {due_display:<12}")
+
+                            print("-" * 85)
+
+                            # Summary totals
+                            if grand_total_fees > 0:
+                                print(f"{'TOTALS':<45} £{grand_total_fees:.2f}     £{grand_total_paid:.2f}     £{grand_total_due:.2f}")
+                                print(f"\nSummary for {len(selected_matches)} match(es):")
+                                print(f"• Total fees generated: £{grand_total_fees:.2f}")
+                                print(f"• Amount collected: £{grand_total_paid:.2f}")
+                                print(f"• Still due: £{grand_total_due:.2f}")
+
+                                if grand_total_fees > 0:
+                                    collection_rate = (grand_total_paid / grand_total_fees) * 100
+                                    print(f"• Collection rate: {collection_rate:.1f}%")
+                            else:
+                                print("No fees generated - no teams selected for these matches")
+
+                            input("\nPress Enter to continue...")
+                            break
+                        else:
+                            print(f"Please enter numbers between 1 and {len(filtered_matches)}, separated by commas")
+                    except ValueError:
+                        print("Please enter valid numbers separated by commas (e.g. 1,3,5) or 'b' to go back")
+
+                break  # Exit filter loop
         else:
-            print(left_line)
-
-    print("-" * 70)
-    print(f"TOTAL OUTSTANDING: £{total_outstanding:.2f}")
-    print(f"Players with fees due: {len(player_balances)}")
-
-    input("\nPress Enter to continue...")
+            print("Please choose a valid option.")
 
 def make_player_inactive():
     """Make a player inactive"""
