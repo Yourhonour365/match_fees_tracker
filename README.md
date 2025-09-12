@@ -238,6 +238,7 @@ m) Club management      e) Exit
 **PEP8 Compliance Check:**
 - **Tool Used**: flake8
 - **Command Run**: `flake8 run.py`
+- **Parameter**: Line length 88 characters
 - **Total Issues Found**: 267 issues
 - **Issue Breakdown**:
   - E501 (line too long): 201 instances

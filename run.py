@@ -798,7 +798,8 @@ def add_players_to_matches(selected_matches):
             local_base_width = 25
 
             for local_i, local_match in enumerate(selected_matches, 1):
-                local_header += f" {'Available':<9}"
+                local_opponent = local_match["opponent"].split()[0][:8]
+                local_header += f" {local_opponent:<9}"
                 local_base_width += 10
 
             local_separator = "-" * local_base_width
@@ -1040,7 +1041,8 @@ def remove_players_from_matches(selected_matches):
             local_base_width = 25
 
             for local_i, local_match in enumerate(selected_matches, 1):
-                local_header += f" {'Available':<9}"
+                local_opponent = local_match["opponent"].split()[0][:8]  # first word, max 8 chars
+                local_header += f" {local_opponent:<9}"
                 local_base_width += 10
 
             local_separator = "-" * local_base_width
