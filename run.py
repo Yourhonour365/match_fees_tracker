@@ -366,8 +366,10 @@ def add_new_fixture():
                 break
             except ValueError:
                 print(
-                    "Invalid date. Please use DD/MM/YY (e.g. 05/09/25) or DD/MM/YYYY (e.g. 05/09/2025)."
+                    "Invalid date. Please use DD/MM/YY (e.g. 05/09/25) or "
+                    "DD/MM/YYYY (e.g. 05/09/2025)."
                 )
+
                 continue
 
     # Get fee
@@ -404,7 +406,8 @@ def add_new_fixture():
             and existing_match["date"] == parsed_date
         ):
             print(
-                f"\n⚠ Note: You already have {club_name} vs {opponent} on {parsed_date.strftime('%d/%m/%Y')}"
+                f"\n⚠ Note: You already have {club_name} vs {opponent} on "
+                f"{parsed_date.strftime('%d/%m/%Y')}"
             )
             while True:
                 confirm = (
@@ -425,7 +428,8 @@ def add_new_fixture():
     matches.append(match)
     save_data()
     print(
-        f"\n✓ Fixture added: {club_name} vs {opponent} on {parsed_date.strftime('%d/%m/%Y')} - £{fee:.2f}"
+        f"\n✓ Fixture added: {club_name} vs {opponent} on "
+        f"{parsed_date.strftime('%d/%m/%Y')} - £{fee:.2f}"
     )
 
 
@@ -447,17 +451,18 @@ def edit_existing_fixture():
 
     # Show what we're editing
     print(
-        f"\nEditing: {selected_match['opponent']} on {selected_match['date'].strftime('%d/%m/%Y')}"
+        f"\nEditing: {selected_match['opponent']} on "
+        f"{selected_match['date'].strftime('%d/%m/%Y')}"
     )
 
     # Simple edit options
     while True:
-        print(f"\nCurrent details:")
+        print("\nCurrent details:")
         print(f"Date: {selected_match['date'].strftime('%d/%m/%Y')}")
         print(f"Opponent: {selected_match['opponent']}")
         print(f"Fee: £{selected_match['fee']:.2f}")
 
-        print(f"\nWhat to edit?")
+        print("\nWhat to edit?")
         print("1) Date")
         print("2) Opponent")
         print("3) Fee")
@@ -521,12 +526,16 @@ def delete_existing_fixture():
 
     # Confirm deletion
     print(
-        f"\nDelete: {selected_match['opponent']} on {selected_match['date'].strftime('%d/%m/%Y')}?"
+        f"\nDelete: {selected_match['opponent']} on "
+        f"{selected_match['date'].strftime('%d/%m/%Y')}?"
     )
+
     if selected_match["players"]:
         print(
-            f"⚠ WARNING: This fixture has {len(selected_match['players'])} players selected"
+            f"⚠ WARNING: This fixture has "
+            f"{len(selected_match['players'])} players selected"
         )
+
 
     confirm = input("Type 'DELETE' to confirm: ").strip()
 
@@ -541,7 +550,7 @@ def delete_existing_fixture():
                 break
 
         save_data()
-        print(f"✓ Fixture deleted")
+        print("✓ Fixture deleted")
     else:
         print("Delete cancelled.")
 
@@ -550,7 +559,6 @@ def mark_attendance():
     """
     Mark a player as attended for a match.
     """
-    global matches, players, inactive_players
 
     if not matches or not players:
         print("You need at least one match and one player first.")
