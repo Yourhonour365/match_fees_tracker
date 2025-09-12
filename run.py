@@ -636,12 +636,12 @@ def mark_attendance():
             f"{selected_display:<8} {available_display:<9}"
         )
 
-    print("\nA maximum of 4 matches can be selected for team selections")
+    print("\nA max of 4 matches can be selected for team selections")
 
     while True:
         choice = input(
-            "\nChoose match number(s) (e.g. 1 or 1,3,5) or 'b' to go back "
-            "(max 4 matches): "
+            "\nSelect matches: 1,3,5 | 1-4 | all | b=back (max 4):"
+            "(max 4): "
         ).strip()
 
         if choice.lower() == "b":
@@ -825,8 +825,7 @@ def add_players_to_matches(selected_matches):
 
             # Go directly to player selection instead of showing menu
             local_players_input = input(
-                "\nChoose player(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or "
-                "'b' to go back: "
+                "\nSelect players to add: 1,3,5 | 1-5 | all | b=back:"
             ).strip()
 
             if local_players_input.lower() == "b":
@@ -1070,8 +1069,7 @@ def remove_players_from_matches(selected_matches):
 
             # Go directly to player selection instead of showing menu
             local_players_input = input(
-                "\nChoose player(s) to remove (e.g. 1 or 1,3,5 or 1-5 or 'all') or "
-                "'b' to go back: "
+                "\nSelect players to remove: 1,3,5 | 1-5 | all | b=back:"
             ).strip()
 
             if local_players_input.lower() == "b":
@@ -1325,8 +1323,7 @@ def list_matches():
 
     while True:
         choice = input(
-            "\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' "
-            "to go back (max 10 matches): "
+            "\nSelect matches: 1,3,5 | 1-4 | all | b=back (max 10): "
         ).strip()
 
         if choice.lower() == "b":
@@ -1488,8 +1485,7 @@ def show_team_sheets():
 
     while True:
         choice = input(
-            "\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' "
-            "to go back (max 8 matches): "
+            "\nSelect matches: 1,3,5 | 1-4 | all | b=back (max 8): "
         ).strip()
 
         if choice.lower() == "b":
@@ -1785,7 +1781,7 @@ def team_sheets_add_players(selected_matches):
 
         # Select players
         local_players_input = input(
-            "\nChoose player(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back: "
+            "\nSelect players to add: 1,3,5 | 1-5 | all | b=back:"
         ).strip()
 
         if local_players_input.lower() == "b":
@@ -1971,8 +1967,8 @@ def team_sheets_remove_players(selected_matches):
 
         # Select players to remove
         local_players_input = input(
-            "\nChoose player(s) to remove (e.g. 1 or 1,3,5 or 1-5 or 'all') "
-            "or 'b' to go back: "
+            "\nSelect players to remove: 1,3,5 | 1-5 | all | b=back:"
+            "or 'b' for back: "
         ).strip()
 
         if local_players_input.lower() == "b":
@@ -2567,8 +2563,7 @@ def view_fee_balances():
                 # Match selection with enhanced options
                 while True:
                     choice_input = input(
-                        "\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-6 or 'all') "
-                        "or 'b' to go back (max 6 matches): "
+                        "\nSelect matches: 1,3,5 | 1-4 | all | b=back (max 6): "
                     ).strip()
 
                     if choice_input.lower() == "b":
@@ -3341,7 +3336,7 @@ def match_fees_menu():
 def show_instructions():
     """Display usage instructions for the program."""
     print("\n=== Help / Instructions ===\n")
-    print("This tool helps you manage your club’s players, fixtures, teams, "
+    print("Manage your club’s players, fixtures, teams, "
           "and match fees.")
 
     print("\nMANAGE:")
