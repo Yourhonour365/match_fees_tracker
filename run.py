@@ -1031,7 +1031,6 @@ def remove_players_from_matches(selected_matches):
                 f"({local_team_count} players)"
             )
 
-
         # Show players with their current matches
         print("\nPlayers currently in matches:")
 
@@ -1113,7 +1112,7 @@ def remove_players_from_matches(selected_matches):
                     ]
 
                     # Show selected players
-                    print(f"\n=== Selected Players to Remove ===")
+                    print("\n=== Selected Players to Remove ===")
                     for local_i, (
                         local_player,
                         local_player_match_display,
@@ -1122,19 +1121,22 @@ def remove_players_from_matches(selected_matches):
                         print(f"{local_i}. {local_player}")
 
                     # Show matches again for easy reference
-                    print(f"\n=== Available Matches ===")
+                    print("\n=== Available Matches ===")
                     for local_i, local_match in enumerate(selected_matches, 1):
                         local_date_fmt = local_match["date"].strftime("%d %b %y")
                         local_team_count = len(local_match["players"])
                         print(
-                            f"{local_i}. {local_date_fmt} vs {local_match['opponent']} ({local_team_count} players)"
+                            f"{local_i}. {local_date_fmt} vs {local_match['opponent']} "
+                            f"({local_team_count} players)"
                         )
 
                     # Select matches to remove players from
                     local_matches_input = (
                         input(
-                            f"\nRemove selected players from which matches? (e.g. 1 or 1,3,4 or 'all'): "
+                            "\nRemove selected players from which matches? "
+                            "(e.g. 1 or 1,3,4 or 'all'): "
                         )
+
                         .strip()
                         .lower()
                     )
@@ -1155,8 +1157,10 @@ def remove_players_from_matches(selected_matches):
                                 ]
                             else:
                                 print(
-                                    f"Please enter numbers between 1 and {len(selected_matches)}"
+                                    f"Please enter numbers between 1 and "
+                                    f"{len(selected_matches)}"
                                 )
+
                                 input("Press Enter to continue...")
                                 continue
                         except ValueError:
@@ -1190,7 +1194,7 @@ def remove_players_from_matches(selected_matches):
 
                     # Show confirmation
                     if local_removed_count > 0:
-                        print(f"\n✓ Removed players successfully!")
+                        print("\n✓ Removed players successfully!")
 
                         for local_match_idx in local_target_match_indices:
                             local_match = selected_matches[local_match_idx]
@@ -1213,17 +1217,23 @@ def remove_players_from_matches(selected_matches):
                                     f"\n{local_date_fmt} vs {local_match['opponent']}:"
                                 )
                                 for local_player in local_removed_from_this_match:
-                                    print(f"  • {local_player}")
+                                    print(
+                                        f"  • {local_player}"
+                                    )
+
                     else:
                         print(
-                            "\nNo players were removed (they may not be selected for those matches)"
+                            "\nNo players were removed "
+                            "(they may not be selected for those matches)"
                         )
 
                     input("\nPress Enter to continue...")
                 else:
                     print(
-                        f"Please enter numbers between 1 and {len(local_player_removal_options)}"
+                        f"Please enter numbers between 1 and "
+                        f"{len(local_player_removal_options)}"
                     )
+
                     input("Press Enter to continue...")
             except ValueError:
                 print("Please enter valid numbers separated by commas")
@@ -1313,7 +1323,8 @@ def list_matches():
 
     while True:
         choice = input(
-            "\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back (max 10 matches): "
+            "\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' "
+            "to go back (max 10 matches): "
         ).strip()
 
         if choice.lower() == "b":
@@ -1348,16 +1359,23 @@ def list_matches():
             )
 
             if valid_numbers and match_numbers:
-                selected_matches = [filtered_matches[num - 1] for num in match_numbers]
+                selected_matches = [
+                    filtered_matches[num - 1] for num in match_numbers
+                ]
                 break
+
             else:
                 print(
-                    f"Please enter numbers between 1 and {len(filtered_matches)}, separated by commas"
+                    f"Please enter numbers between 1 and {len(filtered_matches)}, "
+                    f"separated by commas"
                 )
+
         except ValueError:
             print(
-                "Please enter valid numbers separated by commas (e.g. 1,3,5) or 'b' to go back"
+                "Please enter valid numbers separated by commas (e.g. 1,3,5) or "
+                "'b' to go back"
             )
+
 
     # Display selected fixture details
     print("\n=== Fixture Details ===")
@@ -1460,13 +1478,17 @@ def show_team_sheets():
         else:
             status = "No team yet"
 
-        print(f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {status:<15}")
+        print(
+            f"{i:<4} {date_fmt:<10} {match['opponent']:<25} "
+            f"{status:<15}"
+        )
 
     print("A maximum of 8 matches can be selected for team sheets")
 
     while True:
         choice = input(
-            "\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back (max 8 matches): "
+            "\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' "
+            "to go back (max 8 matches): "
         ).strip()
 
         if choice.lower() == "b":
@@ -1497,16 +1519,22 @@ def show_team_sheets():
                 continue
 
             valid_numbers = all(
-                1 <= num <= len(filtered_matches) for num in match_numbers
+                1 <= num <= len(filtered_matches)
+                for num in match_numbers
             )
 
             if valid_numbers and match_numbers:
-                selected_matches = [filtered_matches[num - 1] for num in match_numbers]
+                selected_matches = [
+                    filtered_matches[num - 1] for num in match_numbers
+                ]
                 break
+
             else:
                 print(
-                    f"Please enter numbers between 1 and {len(filtered_matches)}, separated by commas"
+                    f"Please enter numbers between 1 and {len(filtered_matches)}, "
+                    f"separated by commas"
                 )
+
         except ValueError:
             print(
                 "Please enter valid numbers separated by commas (e.g. 1,3,5 or 1-5 or 'all') or 'b' to go back"
