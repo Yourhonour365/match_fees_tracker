@@ -260,11 +260,22 @@ Large Dataset: Tested with 50+ players, 20+ matches
 Response Time: All operations complete within acceptable time
 Memory Usage: Efficient data structures, no memory leaks observed
 
-Known Issues
-IssueSeverityStatusWorkaroundVery long opponent namesMinorOpenNames truncated in displaysTimezone handlingLowDocumentedUses local system time
-Testing Conclusion
-All critical functionality has been tested and verified to work correctly. The application handles user input validation effectively, provides clear error messages, and maintains data integrity throughout all operations. Edge cases are handled gracefully with appropriate user feedback.
-The testing process revealed no critical bugs, and all identified minor issues have been documented with appropriate workarounds where necessary.
+| Issue                    | Severity | Status     | Workaround                                |
+| ------------------------ | -------- | ---------- | ----------------------------------------- |
+| Very long opponent names | Minor    | Open       | Names truncated in displays                |
+| Timezone handling        | Low      | Documented | Uses local system time                     |
+| Long Python functions    | Moderate | Documented | Refactoring planned; code still functional |
+
+### Testing Conclusion
+
+All critical functionality has been thoroughly tested and verified to work correctly.
+- **Input validation** is effective, providing clear and consistent error messages.
+- **Data integrity** is maintained across all operations.
+- **Edge cases** are handled gracefully with appropriate user feedback.
+
+The testing process revealed **no critical bugs**. All identified minor or moderate issues have been documented with suitable workarounds where necessary.
+While some Python functions are longer than ideal, this does not affect functionality; refactoring has been planned as a future improvement.
+
 
 ## Roadmap
 
