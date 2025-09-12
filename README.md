@@ -249,6 +249,8 @@ m) Club management      e) Exit
 **Resolution Status**:
 - **Fixed**: Import formatting, unused globals, f-string issues
 - **Fixed**: Line length issues (acceptable for readability)
+- **Fixed**: Multiple imports on one line
+- **Fixed**: Function redefinition
 
 **Code Quality Score**: Acceptable for production use with documented exceptions
 
