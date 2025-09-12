@@ -1376,7 +1376,6 @@ def list_matches():
                 "'b' to go back"
             )
 
-
     # Display selected fixture details
     print("\n=== Fixture Details ===")
 
@@ -1537,7 +1536,8 @@ def show_team_sheets():
 
         except ValueError:
             print(
-                "Please enter valid numbers separated by commas (e.g. 1,3,5 or 1-5 or 'all') or 'b' to go back"
+                "Please enter valid numbers separated by commas "
+                "(e.g. 1,3,5 or 1-5 or 'all') or 'b' to go back"
             )
 
     # Display selected team sheets in two columns
@@ -1634,7 +1634,7 @@ def show_team_sheets():
             print(f"Fixtures needing team selection: {fixtures_without_teams}")
 
     # Always show team management options after displaying teams
-    print(f"\nTeam Management Options:")
+    print("\nTeam Management Options:")
     print("1) Update teams for these matches")
     print("b) Back to match fees menu")
 
@@ -1686,10 +1686,15 @@ def show_team_sheets():
                 # Show "No players selected" only if no players are selected
                 if not match["players"]:
                     print(
-                        f"{'No players selected':<30} | {col1[0] if col1 else '':<18} | {col2[0] if col2 else ''}"
+                        f"{'No players selected':<30} | "
+                        f"{col1[0] if col1 else '':<18} | "
+                        f"{col2[0] if col2 else ''}"
                     )
 
-            print(f"\nSelected {len(selected_matches)} match(es) for team updates.")
+            print(
+                f"\nSelected {len(selected_matches)} match(es) "
+                f"for team updates."
+            )
 
             # Team management loop
             while True:
@@ -1789,7 +1794,8 @@ def team_sheets_add_players(selected_matches):
         elif local_add_choice == "1":
             # Now get player selection
             local_players_input = input(
-                f"\nChoose player(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back: "
+                "\nChoose player(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or "
+                "'b' to go back: "
             ).strip()
 
             if local_players_input.lower() == "b":
@@ -1806,8 +1812,10 @@ def team_sheets_add_players(selected_matches):
                         local_player_numbers = list(range(local_start, local_end + 1))
                     else:
                         print(
-                            f"Range must be between 1 and {len(local_player_availability)}"
+                            f"Range must be between 1 and "
+                            f"{len(local_player_availability)}"
                         )
+
                         input("Press Enter to continue...")
                         continue
                 else:
@@ -1825,7 +1833,7 @@ def team_sheets_add_players(selected_matches):
                     ]
 
                     # Show selected players
-                    print(f"\n=== Selected Players ===")
+                    print("\n=== Selected Players ===")
                     for local_i, (
                         local_player,
                         local_availability,
@@ -1834,17 +1842,18 @@ def team_sheets_add_players(selected_matches):
                         print(f"{local_i}. {local_player}")
 
                     # Show matches again for easy reference
-                    print(f"\n=== Available Matches ===")
+                    print("\n=== Available Matches ===")
                     for local_i, local_match in enumerate(selected_matches, 1):
                         local_date_fmt = local_match["date"].strftime("%d %b %y")
                         local_team_count = len(local_match["players"])
                         print(
-                            f"{local_i}. {local_date_fmt} vs {local_match['opponent']} ({local_team_count} players)"
+                            f"{local_i}. {local_date_fmt} vs {local_match['opponent']} "
+                            f"({local_team_count} players)"
                         )
 
                     # Select matches
                     local_matches_input = (
-                        input(f"\nAdd to which matches? (e.g. 1 or 1,3,4 or 'all'): ")
+                        input("\nAdd to which matches? (e.g. 1 or 1,3,4 or 'all'): ")
                         .strip()
                         .lower()
                     )
@@ -1865,8 +1874,10 @@ def team_sheets_add_players(selected_matches):
                                 ]
                             else:
                                 print(
-                                    f"Please enter numbers between 1 and {len(selected_matches)}"
+                                    f"Please enter numbers between 1 and "
+                                    f"{len(selected_matches)}"
                                 )
+
                                 input("Press Enter to continue...")
                                 continue
                         except ValueError:
@@ -1895,10 +1906,11 @@ def team_sheets_add_players(selected_matches):
                     save_data()
 
                     if local_added_count > 0:
-                        print(f"\n✓ Players added successfully!")
+                        print("\n✓ Players added successfully!")
                     else:
                         print(
-                            f"\nNo players were added (they may already be selected for those matches)"
+                            "\nNo players were added "
+                            "(they may already be selected for those matches)"
                         )
 
                     input("Press Enter to continue...")
@@ -1906,8 +1918,10 @@ def team_sheets_add_players(selected_matches):
                     continue
                 else:
                     print(
-                        f"Please enter numbers between 1 and {len(local_player_availability)}"
+                        f"Please enter numbers between 1 and "
+                        f"{len(local_player_availability)}"
                     )
+
                     input("Press Enter to continue...")
             except ValueError:
                 print("Please enter valid numbers")
@@ -1996,7 +2010,8 @@ def team_sheets_remove_players(selected_matches):
         elif local_remove_choice == "1":
             # Now get player selection
             local_players_input = input(
-                f"\nChoose player(s) to remove (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back: "
+                "\nChoose player(s) to remove (e.g. 1 or 1,3,5 or 1-5 or 'all') or "
+                "'b' to go back: "
             ).strip()
 
             if local_players_input.lower() == "b":
@@ -2018,8 +2033,10 @@ def team_sheets_remove_players(selected_matches):
                         local_player_numbers = list(range(local_start, local_end + 1))
                     else:
                         print(
-                            f"Range must be between 1 and {len(local_player_removal_options)}"
+                            f"Range must be between 1 and "
+                            f"{len(local_player_removal_options)}"
                         )
+
                         input("Press Enter to continue...")
                         continue
                 else:
@@ -2037,7 +2054,7 @@ def team_sheets_remove_players(selected_matches):
                     ]
 
                     # Show selected players
-                    print(f"\n=== Selected Players to Remove ===")
+                    print("\n=== Selected Players to Remove ===")
                     for local_i, (
                         local_player,
                         local_player_match_display,
@@ -2046,18 +2063,19 @@ def team_sheets_remove_players(selected_matches):
                         print(f"{local_i}. {local_player}")
 
                     # Show matches again for easy reference
-                    print(f"\n=== Available Matches ===")
+                    print("\n=== Available Matches ===")
                     for local_i, local_match in enumerate(selected_matches, 1):
                         local_date_fmt = local_match["date"].strftime("%d %b %y")
                         local_team_count = len(local_match["players"])
                         print(
-                            f"{local_i}. {local_date_fmt} vs {local_match['opponent']} ({local_team_count} players)"
+                            f"{local_i}. {local_date_fmt} vs {local_match['opponent']} "
+                            f"({local_team_count} players)"
                         )
 
                     # Select matches to remove from
                     local_matches_input = (
                         input(
-                            f"\nRemove from which matches? (e.g. 1 or 1,3,4 or 'all'): "
+                            "\nRemove from which matches? (e.g. 1 or 1,3,4 or 'all'): "
                         )
                         .strip()
                         .lower()
@@ -2079,8 +2097,10 @@ def team_sheets_remove_players(selected_matches):
                                 ]
                             else:
                                 print(
-                                    f"Please enter numbers between 1 and {len(selected_matches)}"
+                                    f"Please enter numbers between 1 and "
+                                    f"{len(selected_matches)}"
                                 )
+
                                 input("Press Enter to continue...")
                                 continue
                         except ValueError:
@@ -2113,10 +2133,11 @@ def team_sheets_remove_players(selected_matches):
                     save_data()
 
                     if local_removed_count > 0:
-                        print(f"\n✓ Players removed successfully!")
+                        print("\n✓ Players removed successfully!")
                     else:
                         print(
-                            f"\nNo players were removed (they may not be selected for those matches)"
+                            "\nNo players were removed "
+                            "(they may not be selected for those matches)"
                         )
 
                     input("Press Enter to continue...")
