@@ -2145,8 +2145,10 @@ def team_sheets_remove_players(selected_matches):
                     continue
                 else:
                     print(
-                        f"Please enter numbers between 1 and {len(local_player_removal_options)}"
+                        f"Please enter numbers between 1 and "
+                        f"{len(local_player_removal_options)}"
                     )
+
                     input("Press Enter to continue...")
             except ValueError:
                 print("Please enter valid numbers")
@@ -2223,7 +2225,7 @@ def team_sheets_add_players(selected_matches):
 
         # Select players
         local_players_input = input(
-            f"\nChoose player(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back: "
+            "\nChoose player(s) (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back: "
         ).strip()
 
         if local_players_input.lower() == "b":
@@ -2257,7 +2259,7 @@ def team_sheets_add_players(selected_matches):
                 ]
 
                 # Show selected players
-                print(f"\n=== Selected Players ===")
+                print("\n=== Selected Players ===")
                 for local_i, (
                     local_player,
                     local_availability,
@@ -2266,17 +2268,18 @@ def team_sheets_add_players(selected_matches):
                     print(f"{local_i}. {local_player}")
 
                 # Show matches again for easy reference
-                print(f"\n=== Available Matches ===")
+                print("\n=== Available Matches ===")
                 for local_i, local_match in enumerate(selected_matches, 1):
                     local_date_fmt = local_match["date"].strftime("%d %b %y")
                     local_team_count = len(local_match["players"])
                     print(
-                        f"{local_i}. {local_date_fmt} vs {local_match['opponent']} ({local_team_count} players)"
+                        f"{local_i}. {local_date_fmt} vs {local_match['opponent']} "
+                        f"({local_team_count} players)"
                     )
 
                 # Select matches
                 local_matches_input = (
-                    input(f"\nAdd to which matches? (e.g. 1 or 1,3,4 or 'all'): ")
+                    input("\nAdd to which matches? (e.g. 1 or 1,3,4 or 'all'): ")
                     .strip()
                     .lower()
                 )
@@ -2297,8 +2300,10 @@ def team_sheets_add_players(selected_matches):
                             ]
                         else:
                             print(
-                                f"Please enter numbers between 1 and {len(selected_matches)}"
+                                f"Please enter numbers between 1 and "
+                                f"{len(selected_matches)}"
                             )
+
                             continue
                     except ValueError:
                         print("Invalid input")
@@ -2325,13 +2330,15 @@ def team_sheets_add_players(selected_matches):
                 save_data()
 
                 if local_added_count > 0:
-                    print(f"\n✓ Players added successfully!")
+                    print("\n✓ Players added successfully!")
                     input("Press Enter to continue...")
                 break
             else:
                 print(
-                    f"Please enter numbers between 1 and {len(local_player_availability)}"
+                    f"Please enter numbers between 1 and "
+                    f"{len(local_player_availability)}"
                 )
+
         except ValueError:
             print("Please enter valid numbers")
 
@@ -2404,7 +2411,8 @@ def team_sheets_remove_players(selected_matches):
 
         # Select players to remove
         local_players_input = input(
-            f"\nChoose player(s) to remove (e.g. 1 or 1,3,5 or 1-5 or 'all') or 'b' to go back: "
+            "\nChoose player(s) to remove (e.g. 1 or 1,3,5 or 1-5 or 'all') "
+            "or 'b' to go back: "
         ).strip()
 
         if local_players_input.lower() == "b":
@@ -2416,13 +2424,18 @@ def team_sheets_remove_players(selected_matches):
                     range(1, len(local_player_removal_options) + 1)
                 )
             elif "-" in local_players_input and "," not in local_players_input:
-                local_start, local_end = map(int, local_players_input.split("-"))
+                local_start, local_end = map(
+                    int,
+                    local_players_input.split("-")
+                )
                 if 1 <= local_start <= local_end <= len(local_player_removal_options):
                     local_player_numbers = list(range(local_start, local_end + 1))
                 else:
                     print(
-                        f"Range must be between 1 and {len(local_player_removal_options)}"
+                        f"Range must be between 1 and "
+                        f"{len(local_player_removal_options)}"
                     )
+
                     continue
             else:
                 local_player_numbers = [
@@ -2439,7 +2452,7 @@ def team_sheets_remove_players(selected_matches):
                 ]
 
                 # Show selected players
-                print(f"\n=== Selected Players to Remove ===")
+                print("\n=== Selected Players to Remove ===")
                 for local_i, (
                     local_player,
                     local_player_match_display,
@@ -2448,17 +2461,18 @@ def team_sheets_remove_players(selected_matches):
                     print(f"{local_i}. {local_player}")
 
                 # Show matches again for easy reference
-                print(f"\n=== Available Matches ===")
+                print("\n=== Available Matches ===")
                 for local_i, local_match in enumerate(selected_matches, 1):
                     local_date_fmt = local_match["date"].strftime("%d %b %y")
                     local_team_count = len(local_match["players"])
                     print(
-                        f"{local_i}. {local_date_fmt} vs {local_match['opponent']} ({local_team_count} players)"
+                        f"{local_i}. {local_date_fmt} vs {local_match['opponent']} "
+                        f"({local_team_count} players)"
                     )
 
                 # Select matches to remove from
                 local_matches_input = (
-                    input(f"\nRemove from which matches? (e.g. 1 or 1,3,4 or 'all'): ")
+                    input("\nRemove from which matches? (e.g. 1 or 1,3,4 or 'all'): ")
                     .strip()
                     .lower()
                 )
@@ -2479,8 +2493,10 @@ def team_sheets_remove_players(selected_matches):
                             ]
                         else:
                             print(
-                                f"Please enter numbers between 1 and {len(selected_matches)}"
+                                f"Please enter numbers between 1 and "
+                                f"{len(selected_matches)}"
                             )
+
                             continue
                     except ValueError:
                         print("Invalid input")
@@ -2511,13 +2527,15 @@ def team_sheets_remove_players(selected_matches):
                 save_data()
 
                 if local_removed_count > 0:
-                    print(f"\n✓ Players removed successfully!")
+                    print("\n✓ Players removed successfully!")
                     input("Press Enter to continue...")
                 break
             else:
                 print(
-                    f"Please enter numbers between 1 and {len(local_player_removal_options)}"
+                    f"Please enter numbers between 1 and "
+                    f"{len(local_player_removal_options)}"
                 )
+
         except ValueError:
             print("Please enter valid numbers")
 
@@ -2572,14 +2590,14 @@ def club_management():
         elif choice == "1":
             confirm = (
                 input(
-                    "Are you sure you want to delete all club data? This cannot be undone. (yes/no): "
+                    "Are you sure you want to delete all club data? "
+                    "This cannot be undone. (yes/no): "
                 )
+
                 .strip()
                 .lower()
             )
             if confirm == "yes":
-                global club_name, players, matches, inactive_players
-                club_name = ""
                 players.clear()
                 matches.clear()
                 inactive_players.clear()
@@ -2667,7 +2685,7 @@ def record_payment():
             print(f"{'TOTAL DUE':<49} £{total_due:.2f}")
 
             # Show suggested payment amounts
-            print(f"\nValid payment amounts (full matches only):")
+            print("\nValid payment amounts (full matches only):")
             running_total = 0
             for i, match in enumerate(unpaid_matches, 1):
                 running_total += match["fee"]
@@ -2676,7 +2694,7 @@ def record_payment():
             # Get payment amount
             while True:
                 amount_input = input(
-                    f"\nEnter payment amount or 'b' to go back: £"
+                    "\nEnter payment amount or 'b' to go back: £"
                 ).strip()
 
                 if amount_input.lower() == "b":
@@ -2691,8 +2709,10 @@ def record_payment():
 
                     if payment_amount > total_due:
                         print(
-                            f"Payment amount cannot exceed total due of £{total_due:.2f}"
+                            f"Payment amount cannot exceed total due of "
+                            f"£{total_due:.2f}"
                         )
+
                         continue
 
                     # Check if payment covers full matches only
@@ -2718,14 +2738,17 @@ def record_payment():
                         save_data()
 
                         print(
-                            f"\n✓ Payment of £{payment_amount:.2f} recorded for {selected_player}"
+                            f"\n✓ Payment of £{payment_amount:.2f} recorded for "
+                            f"{selected_player}"
                         )
+
                         print("\nPayment allocated to:")
 
                         for match, amount, status in payments_made:
                             date_fmt = match["date"].strftime("%d %b %y")
                             print(
-                                f"  • {date_fmt} vs {match['opponent']}: £{amount:.2f} ({status})"
+                                f"  • {date_fmt} vs {match['opponent']}: "
+                                f"£{amount:.2f} ({status})"
                             )
 
                         print(
@@ -3067,8 +3090,11 @@ def view_fee_balances():
                             # Summary totals
                             if grand_total_fees > 0:
                                 print(
-                                    f"{'TOTALS':<37} £{grand_total_fees:.0f}     £{grand_total_paid:.0f}     £{grand_total_due:.0f}"
+                                    f"{'TOTALS':<37} £{grand_total_fees:.0f}     "
+                                    f"£{grand_total_paid:.0f}     "
+                                    f"£{grand_total_due:.0f}"
                                 )
+
                                 print(
                                     f"\nSummary for {len(selected_matches)} match(es):"
                                 )
@@ -3185,7 +3211,8 @@ def make_player_active():
     """
     Make an inactive player active again.
 
-    Note: The persistent data file is updated only after all changes are made, not after each individual change.
+    Note: The persistent data file is updated only after all
+    changes are made, not after each individual change.
     """
     if not players:
         print("\nNo players registered.")
@@ -3229,8 +3256,10 @@ def make_player_active():
 
     while inactive_players:
         choice = input(
-            "\nEnter player number(s) to make active (e.g. 1 or 1,3,5 or 1-4 or 'all', Enter to finish): "
+            "\nEnter player number(s) to make active (e.g. 1 or 1,3,5 or 1-4 or "
+            "'all', Enter to finish): "
         ).strip()
+
         if not choice:
             break
 
@@ -3504,7 +3533,10 @@ def match_fees_menu():
                     if right_match:
                         right_date = right_match["date"].strftime("%d %b %y").upper()
                         right_num = i + 2
-                        right_header = f"{right_num}. {right_date} VS {right_match['opponent'].upper()}"
+                        right_header = (
+                            f"{right_num}. {right_date} VS "
+                            f"{right_match['opponent'].upper()}"
+                        )
 
                     # Calculate fees for left match
                     if not left_match["players"]:
@@ -3554,12 +3586,20 @@ def match_fees_menu():
 
                     for j in range(max_unpaid):
                         if j < len(left_unpaid):
-                            left_player = f"  {j+1:2}. {left_unpaid[j]:<20} £{left_match['fee']:.2f}"
+                            left_player = (
+                                f"  {j+1:2}. {left_unpaid[j]:<20} "
+                                f"£{left_match['fee']:.2f}"
+                            )
+
                         else:
                             left_player = ""
 
                         if right_match and j < len(right_unpaid):
-                            right_player = f"  {j+1:2}. {right_unpaid[j]:<20} £{right_match['fee']:.2f}"
+                            right_player = (
+                                f"  {j+1:2}. {right_unpaid[j]:<20} "
+                                f"£{right_match['fee']:.2f}"
+                            )
+
                         else:
                             right_player = ""
 
@@ -3589,18 +3629,19 @@ def match_fees_menu():
 
                 # Summary
                 print("-" * 40)
-                print(f"SUMMARY:")
+                print("SUMMARY:")
                 print(f"• Total outstanding fees: £{total_outstanding:.2f}")
                 print(f"• Matches with fees due: {matches_with_fees_due}")
                 print(
-                    f"• Matches fully paid: {len(filtered_matches) - matches_with_fees_due}"
+                    f"• Matches fully paid: "
+                    f"{len(filtered_matches) - matches_with_fees_due}"
                 )
 
                 # Add menu options
-                print(f"\nOptions:")
-                print(f"1) Record fee payment")
-                print(f"2) Player fee balances")
-                print(f"b) Back to main menu")
+                print("\nOptions:")
+                print("1) Record fee payment")
+                print("2) Player fee balances")
+                print("b) Back to main menu")
 
                 option_choice = input("\nChoose option: ").strip().lower()
 
