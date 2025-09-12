@@ -137,7 +137,7 @@ def save_data():
 
 
 def load_data():
-    global club_name, players, matches, inactive_players
+    global club_name
     if not os.path.exists(DATA_FILE):
         create_demo_data()
         return
@@ -272,7 +272,9 @@ def list_players():
 
     print("-" * 64)
     print(
-        f"Total: {total} players ({len([p for p in players if p not in inactive_players])} active, {len(inactive_players)} inactive)"
+        f"Total: {total} players "
+        f"({len([p for p in players if p not in inactive_players])} active, "
+        f"{len(inactive_players)} inactive)"
     )
 
     # Wait for user input before returning to player management
