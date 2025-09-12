@@ -3339,6 +3339,12 @@ def show_instructions():
     print("Manage your club’s players, fixtures, teams, "
           "and match fees.")
 
+    print("\nFIRST TIME USERS:")
+    print("- Demo club data is loaded so you can explore safely.")
+    print("- Try adding players, selecting teams, and recording match fees.")
+    print("- Once comfortable, open Club Management (m) to delete demo data.")
+    print("- Then add your own club, players, fixtures, and details.")
+
     print("\nMANAGE:")
     print("1) Players        - Add, edit, deactivate, or view players.")
     print("2) Team selection - Pick squads for upcoming matches.")
