@@ -2752,7 +2752,8 @@ def record_payment():
                             )
 
                         print(
-                            f"\nNew outstanding balance: £{total_due - payment_amount:.2f}"
+                            f"\nNew outstanding balance: "
+                            f"£{total_due - payment_amount:.2f}"
                         )
 
                         # Update the players_with_fees list
@@ -2787,28 +2788,41 @@ def record_payment():
                         # Payment amount doesn't match exact matches
                         if running_total > 0:
                             print(
-                                f"\n⚠ Payment of £{payment_amount:.2f} doesn't match full match payments"
+                                f"\n⚠ Payment of £{payment_amount:.2f} "
+                                f"doesn't match full match payments"
                             )
+
                             print(
-                                f"This would pay {full_matches_that_can_be_paid} match(es) (£{running_total:.2f}) with £{payment_amount - running_total:.2f} remaining"
+                                f"This would pay "
+                                f"{full_matches_that_can_be_paid} match(es) "
+                                f"(£{running_total:.2f}) "
+                                f"with £{payment_amount - running_total:.2f} "
+                                f"remaining"
                             )
+
                             print(
-                                "Only full match payments are accepted to avoid partial payment confusion."
+                                "Only full match payments are accepted "
+                                "to avoid partial payment confusion."
                             )
+
                             print(f"\nValid amounts for {selected_player}:")
 
                             temp_total = 0
                             for i, match in enumerate(unpaid_matches, 1):
                                 temp_total += match["fee"]
                                 print(
-                                    f"  £{temp_total:.2f} (pays {i} match{'es' if i > 1 else ''})"
+                                    f"  £{temp_total:.2f} (pays {i} match"
+                                    f"{'es' if i > 1 else ''})"
                                 )
 
                             continue
                         else:
                             print(
-                                f"\n⚠ Payment amount £{payment_amount:.2f} is less than the oldest match fee of £{unpaid_matches[0]['fee']:.2f}"
+                                f"\n⚠ Payment amount £{payment_amount:.2f} "
+                                f"is less than the oldest match fee of "
+                                f"£{unpaid_matches[0]['fee']:.2f}"
                             )
+
                             print("Please pay at least one full match fee.")
                             continue
 
@@ -2963,15 +2977,18 @@ def view_fee_balances():
 
                 if not filtered_matches:
                     print(
-                        "\nNo matches found for the selected period. Try a different filter."
+                        "\nNo matches found for the selected period. "
+                        "Try a different filter."
                     )
                     continue
 
                 # Show matches for selection
                 print("\n=== Select Matches for Financial Report ===")
                 print(
-                    f"{'No.':<4} {'Date':<10} {'Opponent':<25} {'Players':<8} {'Fee':<8}"
+                    f"{'No.':<4} {'Date':<10} {'Opponent':<25} "
+                    f"{'Players':<8} {'Fee':<8}"
                 )
+
                 print("-" * 60)
 
                 for i, match in enumerate(filtered_matches, 1):
@@ -2981,7 +2998,8 @@ def view_fee_balances():
                     fee_fmt = f"£{match['fee']:.2f}"
 
                     print(
-                        f"{i:<4} {date_fmt:<10} {match['opponent']:<25} {player_display:<8} {fee_fmt:<8}"
+                        f"{i:<4} {date_fmt:<10} {match['opponent']:<25} "
+                        f"{player_display:<8} {fee_fmt:<8}"
                     )
 
                 print("A maximum of 6 matches can be selected for financial reports")
@@ -2989,7 +3007,8 @@ def view_fee_balances():
                 # Match selection with enhanced options
                 while True:
                     choice_input = input(
-                        "\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-6 or 'all') or 'b' to go back (max 6 matches): "
+                        "\nChoose match number(s) (e.g. 1 or 1,3,5 or 1-6 or 'all') "
+                        "or 'b' to go back (max 6 matches): "
                     ).strip()
 
                     if choice_input.lower() == "b":
@@ -3011,8 +3030,10 @@ def view_fee_balances():
                                 match_numbers = list(range(start, min(end + 1, 7)))
                             else:
                                 print(
-                                    f"Range must be between 1 and {len(filtered_matches)}"
+                                    f"Range must be between 1 and "
+                                    f"{len(filtered_matches)}"
                                 )
+
                                 continue
                         else:
                             # Handle individual numbers or comma-separated
@@ -3023,8 +3044,10 @@ def view_fee_balances():
                         # Validate all numbers are in range and limit to 6 matches
                         if len(match_numbers) > 6:
                             print(
-                                "Maximum 6 matches can be selected at once for financial reports"
+                                "Maximum 6 matches can be selected at once "
+                                "for financial reports"
                             )
+
                             continue
 
                         valid_numbers = all(
@@ -3039,8 +3062,10 @@ def view_fee_balances():
                             # Generate financial report with compact formatting
                             print("\n=== Match Financial Report ===")
                             print(
-                                f"{'Date':<10} {'Opponent':<20} {'Players':<7} {'Total':<8} {'Paid':<8} {'Due':<8}"
+                                f"{'Date':<10} {'Opponent':<20} {'Players':<7} "
+                                f"{'Total':<8} {'Paid':<8} {'Due':<8}"
                             )
+
                             print("-" * 65)
 
                             grand_total_fees = 0
@@ -3082,7 +3107,12 @@ def view_fee_balances():
                                 ]  # Truncate long names
 
                                 print(
-                                    f"{date_fmt:<10} {opponent_short:<20} {player_display:<7} {fees_display:<8} {paid_display:<8} {due_display:<8}"
+                                    f"{date_fmt:<10} "
+                                    f"{opponent_short:<20} "
+                                    f"{player_display:<7} "
+                                    f"{fees_display:<8} "
+                                    f"{paid_display:<8} "
+                                    f"{due_display:<8}"
                                 )
 
                             print("-" * 65)
@@ -3111,18 +3141,23 @@ def view_fee_balances():
                                     print(f"• Collection rate: {collection_rate:.1f}%")
                             else:
                                 print(
-                                    "No fees generated - no teams selected for these matches"
+                                    "No fees generated - "
+                                    "no teams selected for these matches"
                                 )
 
                             input("\nPress Enter to continue...")
                             break
                         else:
                             print(
-                                f"Please enter numbers between 1 and {len(filtered_matches)}, separated by commas"
+                                f"Please enter numbers between 1 and "
+                                f"{len(filtered_matches)}, "
+                                f"separated by commas"
                             )
                     except ValueError:
                         print(
-                            "Please enter valid numbers separated by commas (e.g. 1,3,5 or 1-6 or 'all') or 'b' to go back"
+                            "Please enter valid numbers separated by commas "
+                            "(e.g. 1,3,5 or 1-6 or 'all') "
+                            "or 'b' to go back"
                         )
 
                 break  # Exit filter loop
