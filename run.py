@@ -3338,6 +3338,39 @@ def match_fees_menu():
             print("Please choose a valid option.")
 
 
+def show_instructions():
+    """Display usage instructions for the program."""
+    print("\n=== Help / Instructions ===\n")
+    print("This tool helps you manage your club’s players, fixtures, teams, "
+          "and match fees.")
+
+    print("\nMANAGE:")
+    print("1) Players        - Add, edit, deactivate, or view players.")
+    print("2) Team selection - Pick squads for upcoming matches.")
+    print("3) Fixtures       - Add, edit, or delete fixtures.")
+    print("4) Match fees     - Track and record payments.")
+
+    print("\nREPORTS:")
+    print("5) Player list    - Show all players with active/inactive status.")
+    print("6) Team sheets    - View or update selected teams.")
+    print("7) Fixture list   - Browse upcoming or past fixtures.")
+    print("8) Fee balances   - Show which players owe fees and amounts.")
+
+    print("\nOTHER:")
+    print("m) Club management - Delete club data or reset the system.")
+    print("h) Help            - Show this help page.")
+    print("e) Exit            - Quit the program.")
+
+    print("\nTips:")
+    print("- Use numbers or letters to pick options from menus.")
+    print("- Use 'b' to go back at any time.")
+    print("- Data is saved automatically to 'data.json'.")
+    print("- Players marked inactive will not appear in selections.")
+    print("- Match fees can only be recorded against fixtures.")
+
+    input("\nPress Enter to return to the main menu...")
+
+
 def main():
     """
     Add club name if not already added.
@@ -3362,7 +3395,7 @@ def main():
         print(f"{'5) Player list':<20} {'7) Fixture list'}")
         print(f"{'6) Team sheets':<20} {'8) Match fee balances'}")
         print()
-        print(f"{'m) Club management':<20} {'e) Exit'}")
+        print(f"{'m) Club management':<20} {'h) Help / Instructions':<25} {'e) Exit'}")
         print()
 
         if not club_name:
@@ -3373,6 +3406,9 @@ def main():
         choice = input("Choose option from menu above: ").strip()
         if choice == "m":
             club_management()
+            continue
+        elif choice == "h":
+            show_instructions()
             continue
         elif choice == "e":
             print("Goodbye!")
