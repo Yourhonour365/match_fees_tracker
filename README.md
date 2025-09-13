@@ -103,9 +103,8 @@ REPORTS:
 5) Player list          7) Fixture list
 6) Team sheets          8) Match fee balances
 
-m) Club management      e) Exit
+m) Club management      h) Help / Instructions      e) Exit
 ```
-
 ### Player Management
 - **Add players**: Enter names one at a time with automatic formatting
 - **Edit names**: Update player names with system-wide updates
