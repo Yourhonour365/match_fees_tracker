@@ -2166,8 +2166,6 @@ def club_management():
                 if not club_name:
                     club_name = "My Club"
                 print(f"✓ Club name set to: {club_name}")
-
-
             else:
                 print("Delete cancelled.")
         else:
