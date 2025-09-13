@@ -1065,7 +1065,7 @@ def remove_players_from_matches(selected_matches):
                 print(local_line)
 
             print(local_separator)
-            print("Total players in matches: {len(local_player_removal_options)}")
+            print(f"Total players in matches: {len(local_player_removal_options)}")
 
             # Go directly to player selection instead of showing menu
             local_players_input = input(
