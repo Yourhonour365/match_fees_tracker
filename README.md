@@ -35,6 +35,79 @@ A Python tool to help amateur sports clubs easily collect and manage match fees.
 - **Fixture lists** with multiple filtering options
 - **Financial summaries** showing outstanding fees and collection rates
 
+## Planning
+
+
+Before building the Match Fees Tracker, I mapped out how amateur clubs currently manage fixtures, players, and payments. The planning process included:
+
+
+- **Identifying real-world challenges**
+- Fixtures include both *league* games and *friendlies*.
+- Communication is split across WhatsApp groups (players, parents, committee).
+- Match fees are collected by **team captains** — usually in **cash** or by **card (SumUp)**.
+- **Club subscriptions (subs)** are also collected during the season, often through a mix of:
+- cash payments at the bar,
+- direct bank transfers, or
+- card transactions using SumUp.
+- This creates extra admin because records are scattered across bar books, bank statements, and WhatsApp messages.
+- Payments may also go onto **bar tabs**, which are still tracked in paper books.
+- Fees and subs are often tracked manually via WhatsApp messages, leading to confusion and errors.
+
+
+- **Defining key roles**
+- **Players (adults & kids)** — take part in fixtures.
+- **Parents** — handle payments for junior players.
+- **Captains** — responsible for collecting and recording match fees.
+- **Volunteers/Committee** — oversee club data, fixtures, finances.
+
+
+- **Flowchart of the ecosystem**
+
+
+```mermaid
+flowchart TD
+    Club[Club Organisation]
+    Committee["Committee (WhatsApp Group)"]
+    Volunteers["Volunteers/Admins"]
+    Captains["Team Captains - Collect Match Fees"]
+    Parents[Parents]
+    Players["Players - Adults & Kids"]
+    Fixtures["Fixtures - League & Friendlies"]
+    Teams[Teams]
+    Sheets["Team Sheets"]
+    Payments["Match Fees - Cash or Card / SumUp"]
+    Subs["Club Subs - Cash / Bank Transfer / SumUp"]
+    Bar["Bar Tabs - Paper Book"]
+    Fees["Club Finances - Fees + Subs Tracking"]
+
+    Club --> Committee
+    Committee --> Volunteers
+    Volunteers --> Fixtures
+    Fixtures --> Teams
+    Teams --> Sheets
+    Players --> Teams
+    Parents --> Players
+    Players --> Sheets
+
+    %% Match fees
+    Players --> Payments
+    Parents --> Payments
+    Payments --> Captains
+    Payments --> Bar
+    Captains --> Fees
+    Bar --> Fees
+
+    %% Subs
+    Parents --> Subs
+    Players --> Subs
+    Subs --> Volunteers
+    Volunteers --> Fees
+
+
+```
+
+This diagram shows how people, teams, and money flow through a grassroots club. It illustrates the **messy, manual process** that the Python program aims to simplify by providing a structured, centralised tool.
+
 ## Installation
 
 ### Requirements
