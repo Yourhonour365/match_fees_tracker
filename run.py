@@ -2160,6 +2160,13 @@ def club_management():
                 if os.path.exists(DATA_FILE):
                     os.remove(DATA_FILE)
                 print("All club data has been deleted.")
+                # Prompt for new club name
+                global club_name
+                club_name = input("Enter new club name: ").strip()
+                if not club_name:
+                    club_name = "My Club"
+                print(f"✓ Club name set to: {club_name}")
+                save_data()
             else:
                 print("Delete cancelled.")
         else:
