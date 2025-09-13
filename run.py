@@ -2146,8 +2146,7 @@ def club_management():
         elif choice == "1":
             confirm = (
                 input(
-                    "Are you sure you want to delete all club data? "
-                    "This cannot be undone. (yes/no): "
+                    "Delete all club data? This cannot be undone. (yes/no): "
                 )
 
                 .strip()
